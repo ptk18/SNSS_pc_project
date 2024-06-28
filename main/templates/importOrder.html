@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Order</title>
+    <!-- Bootstrap Links -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Jquery to make bootstrap work correctly -->
+    <script src="{% static 'jquery/dist/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+
+    <!-- Stylesheet Link -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+
+    .navbar-nav li a{
+        color: white;
+    }
+    .navbar-nav li a:hover{
+        color: rgba(255, 255, 255, 0.471);
+    }
+    #master-data-dropdown .dropdown-menu a {
+        color: white;
+    }
+    #master-data-dropdown .dropdown-menu a:hover{
+        color: black;
+    }
+    /* Show dropdown menu on hover */
+    #master-data-dropdown:hover .dropdown-menu {
+    display: block;
+    background-color: black;
+    opacity: 0.8;
+    }
+
+    /* Hide dropdown menu by default */
+    .dropdown-menu {
+        display: none;
+    }
+    body {
+        font-family: Arial, sans-serif;
+
+    }
+    .import-orderfile-container {
+        width: 350px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .import-orderfile-container h4,.import-orderfile-container h5 {
+        text-align: center;
+    }
+    .import-orderfile-container input[type="file"]{
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .import-orderfile-container input[type="submit"],.import-orderfile-container button {
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    select {
+        padding: 10px;
+        border: 1px solid #95D1E7; 
+        border-radius: 5px; 
+        background-color: #fff; 
+        width: 100%;;
+    }
+    table{
+        width: 100%;
+    }
+    th,td {
+        height: 30px;
+    }
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        text-align: center;
+    }
+    #manul-entry{
+        width: 100%;
+        background-color: #FF5B00;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .manual-entry-box-container {
+        width: 350px;
+        margin: 0 auto;
+        padding-right: 20px;
+
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .manual-entry-box-container h5 {
+        text-align: center;
+    }
+    .manual-entry-box-container input[type="number"]{
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .manual-entry-box-container input[type="submit"], #generateTable-btn{
+        width: 100%;
+        background-color: #FF5B00;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    #back-to-template-import-btn {
+        width: 100%;
+        background-color: #95D1E7;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    #addRow-btn{
+        width: 120px;
+        height: 40px;
+        margin: 8px 0;
+        border-radius: 4px;
+        background-color: #49CA3E;
+        cursor: pointer;  
+        border: none;
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    #reset-btn{
+        width: 120px;
+        height: 40px;
+        border: none;
+        margin: 8px 0;
+        border-radius: 4px;
+        background-color: #95D1E7;
+        cursor: pointer;  
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    #manual-data-submit{
+        width: 120px;
+        height: 40px;
+        border: none;
+        background-color: #FF5B00;
+        margin: 8px 0;
+        border-radius: 4px;
+        cursor: pointer;  
+        color: white;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    .input-cell{
+        width: 100%;
+        text-align: center;
+    }
+    .del-row{
+        background-color: red;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer; 
+        width: 80px;
+        height: 30px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        border: none;
+    }
+
+    
+    </style>
+</head>
+<body>
+    {% include 'base.html' %}  
+    <div class="data-container" style="display: flex;" >
+        <div style=" flex: 9;  padding: 5px;"  id="preview-data-box">
+            <h3 style="font-weight: bold; ">Preview Data</h3>
+
+            <div id = "preview-table-box" style="display: none;">
+                <table id = "preview-table">
+                    <thead>
+                        <tr id="header-row"></tr>
+                    </thead>
+                    <tbody>
+    
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id = "preview-table-condition-box" >
+                <table id = "preview-table-condition" >
+                    <thead>
+                        <tr id="header-row-condition"></tr>
+                    </thead>
+                    <tbody>
+    
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="tableContainer" style="display: none; padding: 5px; " >
+                <div style="display: flex; margin-bottom: 15px;">
+                    <div style="flex: 6; margin-top: 15px;">
+                        <button id="addRow-btn" onclick="addRow()" > Add Row</button>
+                    </div>
+                    <!--
+                    <div style="flex: 3; padding-right: 5px;">
+                        <label for="customerSelect" style="font-weight: bold;">Select Customer Code:</label><br>
+                        <select id="customerSelect" name="customerSelect" >
+                        </select>
+                    </div>
+                    <div style="flex: 3; padding-right: 5px;">
+                        <label for="timeSelect" style="font-weight: bold;">Select Customer Part No:</label><br>
+                        <select name="timeSelect" id="timeSelect" >
+                            <option value="">30days</option>
+                            <option value="">60days</option>
+                            <option value="">90days</option>
+                        </select>
+                    </div>-->
+                </div>
+                <table id="myTable" >
+                    <thead>
+                        <tr style="background-color: #F2D3D9;">
+                            <th>Tempalate Name</th>
+                            <th>Customer Code</th>
+                            <th>Customer Part Number</th>
+                            <th>Order Qty</th>
+                            <th>Delivery Date</th>
+                            <th>Delivery Time</th>
+                            <th>Delivery Plant</th>
+                            <th>Delete Row</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>     
+                </table>
+                <div id="submit-reset-div" style="display: none;">
+                    <button id="manual-data-submit" onclick="">Submit</button>  
+                    <button id="reset-btn" onclick="reset()" > Reset</button> 
+                </div>
+            </div>
+
+        </div>
+        <div class="import-orderfile-container" style=" flex: 3; ">
+            <div id="import-orderfile-box" >
+                <form id="import-order-Form" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                    <h4>Import Customer Order File </h4><br>
+                    <div style="display: flex; background-color:  #ffc2d296; height: 50px; text-align: center; padding-top: 12px; border-radius: 3px;">
+                        <div style="flex: 6;">
+                            <input type="radio" name="templateType" id="actual-FA" value="actual-FA" checked>
+                            <label for="actual-FA">Actual/FA</label>
+                        </div>
+                        <div style="flex: 6;">
+                            <input type="radio" name="templateType" id="forecast-only" value="forecast-only">
+                            <label for="forecast-only">Forecast Only</label>
+                        </div>
+                    </div><br>
+                    <label for="templateSelect">Select Template:</label><br>
+                    <select id="templateSelect" name="templateSelect" style="margin-top: 5px;">
+                        
+                    </select>
+                    <br><br>
+                    <div id="import-order-Form-actual">
+                        <input type="file" name="file" id="importfile">
+                    </div><br>
+                    <div id="import-order-Form-forecast" style="display: none;">
+                        <label for="start-date-forecast">Start date of forecast file: </label>
+                        <input type="date" name="start-date-forecast" id="start-date"><br><br>
+                    </div>
+                    
+                    <input type="submit" value="Import" id=""><br>
+                </form>
+                <button id="manul-entry" onclick="manualDataEntry()">Enter Manually</button>
+            </div>
+
+            <div id="manual-entry-box" class="manual-entry-box-container" style="display: none;">
+                <h5>Manul Data Entry</h5>
+                <br>
+                <form action="" id="">
+                    <label for="customerSelect">Select Customer Code:</label><br>
+                    <select id="customerSelect" name="customerSelect" >
+                    </select>
+                    <br><br>
+
+                    <label for="partNoSelect">Select Customer Part No:</label><br>
+                    <select name="partNoSelect" id="partNoSelect" >
+                    </select>
+                    <br><br>
+
+                    <label for="row_nums">Enter number of rows: </label><br>
+                    <input type="number" id="row_nums" name="row_nums" required><br><br>
+
+                    <button type="button" onclick="generateTable()" id="generateTable-btn">Generate Table</button>
+                    <button type="button" onclick="back_to_template_import()" id="back-to-template-import-btn">Import From Templates</button>
+                </form>
+            </div>
+
+            <div id="data-submit-or-cancel-box" style="display: none;">
+                <h5>Do you want to submit the data? </h5>
+                <br>
+                <div style="display: flex;">
+                    <input type="checkbox" value="" style="width: 20px; height: 20px; margin-right: 10px;" onclick="apply_conditions(this)">
+                    <label class="label" id="original-operated-checkbox-label">See the original data</label>
+                </div><br>
+                <button value="Submit" id="" onclick="submit_data()">Submit</button><br><br>
+                <button value="Cancel" id="" onclick="cancel_data()" style="background-color: red; color: white;" >Cancel</button>
+                
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+    <script>
+        str = " PHYO THI ";
+        console.log(str, str.length);
+        str = str.trim();
+        console.log(str.length);
+        function onlyOne(checkbox) {
+            var checkboxes = document.getElementsByName('templateType')
+            checkboxes.forEach((item) => {
+                if (item !== checkbox) item.checked = false
+            })
+        }
+        var forecastOnly = document.getElementById('forecast-only');
+        var importOrderFormForecast= document.getElementById('import-order-Form-forecast');
+        var actualFA = document.getElementById('actual-FA');
+        var importOrderForm= document.getElementById('import-order-Form');
+
+        // Add event listener to the checkbox
+        forecastOnly.addEventListener('change', function() {
+            if (this.checked) {
+                importOrderFormForecast.style.display = 'block';
+            } else {
+                importOrderFormForecast.style.display = 'none';
+            }
+        });
+
+        // Add event listener to the checkbox
+        actualFA.addEventListener('change', function() {
+            if (this.checked) {
+                importOrderFormForecast.style.display = 'none';
+            } else {
+                importOrderFormForecast.style.display = 'block';
+            }
+        });
+
+        $(document).ready(function() {
+                $('#home-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/main';
+                });
+            });
+
+            $(document).ready(function() {
+                $('#import-order-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/importOrder_form';
+                });
+            });
+            $(document).ready(function() {
+                $('#templates-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/templates'; 
+                });
+            });
+            $(document).ready(function() {
+                $('#order-plan-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/orderPlan_form'; 
+                });
+            });
+            $('#master-customer-data-tab').click(function(e) {
+                e.preventDefault();
+                window.location.href = '/master_customer_data'; 
+            });
+
+            
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTemplateNames_IDs();
+        });
+
+        function fetchTemplateNames_IDs() {
+            fetch('/get_all_template_names_IDs/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                populateTemplateNames(data);
+            })
+            .catch(error => {
+                console.error('Error fetching templates: ', error);
+            });
+        }
+        function populateTemplateNames(templates){
+            var templateSelect = document.getElementById('templateSelect');
+
+            // Clear existing options
+            templateSelect.innerHTML = '';
+
+            // Add each template name as an option
+            for (var key in templates) {
+                if (templates.hasOwnProperty(key)) {
+                    var option = document.createElement('option');
+                    option.value = key; // Set value to template ID
+                    option.textContent = templates[key]; // Set display text to template name
+                    templateSelect.appendChild(option);
+                }
+            }
+        }
+        let currentTemplateID = 0;
+
+        // Function to handle the response from the AJAX request
+        /*function handleResponse(response) {
+            console.log("Response ",response);
+            for (var key in response){
+                console.log("key is ",key);
+            }
+
+            let columnNameArray = [];
+            // Standard column names array
+            const stdColumnNameArray = ["Template Name", "Customer Code", "Customer Part Number", "Order Qty", "Delivery Date","Delivery Time", "Delivery Plant"];
+            let hasNotIncudeOne = false;
+
+            if (response) {
+                // Extract relevant data
+                var template_info = response.template[0];
+                var column_details = template_info.columnDetails;
+                var data = response.data;
+
+                console.log("template_info: ",template_info);
+                console.log("column_details: ",column_details);
+                console.log("data: ",data);
+
+                // Create table headers
+                var headerRow = document.getElementById("header-row");
+                headerRow.innerHTML = '';
+                headerRow.style.backgroundColor = "#9ABDDC";
+                //var thTemplateID = document.createElement("th");
+                //thTemplateID.textContent = "TemplateID";
+                //headerRow.appendChild(thTemplateID);
+                var thTemplateName = document.createElement("th");
+                thTemplateName.textContent = "Template Name";
+                columnNameArray.push("Template Name");
+                headerRow.appendChild(thTemplateName);
+
+                for (var i = 0; i < column_details.length; i++) {
+                    var columnName = column_details[i].columnName;
+                    var th = document.createElement("th");
+                    columnNameArray.push(columnName);
+                    th.textContent = columnName;
+                    headerRow.appendChild(th);
+                }
+
+                for(var i in stdColumnNameArray){
+                    if(!columnNameArray.includes(stdColumnNameArray[i])){
+                        var thNotIncludeOne = document.createElement("th");
+                        thNotIncludeOne.textContent = stdColumnNameArray[i];
+                        headerRow.appendChild(thNotIncludeOne);
+                        hasNotIncudeOne = true;
+                    }
+                }
+
+                var tbody = document.querySelector("#preview-table tbody");
+                var keys = Object.keys(data);
+                var firstKey = keys[0];
+                for (var i = 0; i < Object.values(data[firstKey]).length; i++) {
+                    var row = document.createElement("tr");
+                    row.style.backgroundColor = "#F5FBFF";
+                    var tdTemplateName = document.createElement("td");
+                    tdTemplateName.textContent = template_info.templateName;
+                    row.appendChild(tdTemplateName);
+
+                    for (var j = 0; j < column_details.length; j++) {
+                        var columnNumber = column_details[j].columnNumber.toString();
+
+                        // Create the table cell element
+                        var td = document.createElement("td");
+
+                        // Check if columnNumber is zero
+                        if (columnNumber === "0") {
+                            console.log("data[columnNumber][i] is null because columnNumber is 0");
+                            td.textContent = "NULL";  // Set the textContent to null if columnNumber is 0
+                        } 
+                        else if (columnNumber.includes(",")) {  // Check for comma in columnNumber
+                            columnNumber = columnNumber.split(",");
+                            if (columnNumber[0] === columnNumber[1]) {
+                                columnNumber = columnNumber[0];  // Use the single value if they are the same
+                            } else {
+                                console.log("Different columns found: ", columnNumber);
+                                // Handle case where there are different column numbers, if needed
+                            }
+                            console.log("data[columnNumber][i] ", data[columnNumber][i]);
+                            td.textContent = data[columnNumber][i];
+                        } 
+                        else {
+                            console.log("data[columnNumber][i] ", data[columnNumber][i]);
+                            td.textContent = data[columnNumber][i];
+                        }
+
+                        row.appendChild(td);
+                    }
+
+                    if (hasNotIncudeOne){
+                        //var tdNotIncludeOne = document.createElement("td");
+                        //tdNotIncludeOne.textContent = "NULL";
+                        //row.appendChild(tdNotIncludeOne);
+                    }
+                    tbody.appendChild(row);
+                }
+                            
+            } else {
+                console.error('Failed to upload file');
+            }
+        }
+
+
+        function handleResponseCondition(response) {
+            for (var key in response){
+                console.log("key is ",key);
+            }
+
+            let columnNameArray = [];
+            // Standard column names array
+            const stdColumnNameArray = ["Template Name", "Customer Code", "Customer Part Number", "Order Qty", "Delivery Date","Delivery Time", "Delivery Plant"];
+            let hasNotIncudeOne = false;
+
+            if (response) {
+                // Extract relevant data
+                var template_info = response.template[0];
+                var column_details = template_info.columnDetails;
+                var data = response.result;
+
+                // Create table headers
+                var headerRow = document.getElementById("header-row-condition");
+                headerRow.style.backgroundColor = "#fdfa72";
+                headerRow.innerHTML = ''
+                //var thTemplateID = document.createElement("th");
+                //thTemplateID.textContent = "TemplateID";
+                //headerRow.appendChild(thTemplateID);
+                var thTemplateName = document.createElement("th");
+                thTemplateName.textContent = "Template Name";
+                columnNameArray.push("Template Name");
+                headerRow.appendChild(thTemplateName);
+
+
+                for(var i in stdColumnNameArray){
+                    if(!columnNameArray.includes(stdColumnNameArray[i])){
+                        var thNotIncludeOne = document.createElement("th");
+                        thNotIncludeOne.textContent = stdColumnNameArray[i];
+                        headerRow.appendChild(thNotIncludeOne);
+                        hasNotIncudeOne = true;
+                    }
+                }
+                var keys = Object.keys(data);
+                var firstKey = keys[0];
+
+                // Create table rows
+                var tbody = document.querySelector("#preview-table-condition tbody");
+                for (var i = 0; i < Object.values(data[firstKey]).length; i++) {
+                    var row = document.createElement("tr");
+                    row.style.backgroundColor = "#FFFEE0";
+                    //var tdTemplateID = document.createElement("td");
+                    //tdTemplateID.textContent = template_info.templateID;
+                    //row.appendChild(tdTemplateID);
+                    var tdTemplateName = document.createElement("td");
+                    tdTemplateName.textContent = template_info.templateName;
+                    row.appendChild(tdTemplateName);
+                    for (var j = 0; j < column_details.length; j++) {
+                        var columnNumber = column_details[j].columnNumber.toString();
+
+                        // Create the table cell element
+                        var td = document.createElement("td");
+
+                        // Check if columnNumber is zero
+                        if (columnNumber == "0") {
+                            console.log("data[columnNumber][i] is null because columnNumber is 0");
+                            td.textContent = "NULL";  // Set the textContent to null if columnNumber is 0
+                        } 
+                        else if (columnNumber.includes(",")) {  // Check for comma in columnNumber
+                            columnNumber = columnNumber.split(",");
+                            if (columnNumber[0] === columnNumber[1]) {
+                                columnNumber = columnNumber[0];  // Use the single value if they are the same
+                            } else {
+                                console.log("Different columns found: ", columnNumber);
+                                // Handle case where there are different column numbers, if needed
+                            }
+                            console.log("data[columnNumber][i] ", data[columnNumber][i]);
+                            td.textContent = data[columnNumber][i];
+                        } 
+                        else {
+                            console.log("data[columnNumber][i] ", data[columnNumber][i]);
+                            td.textContent = data[columnNumber][i];
+                        }
+
+                        // Append the cell to the row
+                        row.appendChild(td);
+                    }
+
+                    if (hasNotIncudeOne){
+                        //var tdNotIncludeOne = document.createElement("td");
+                        //tdNotIncludeOne.textContent = "NULL";
+                        //row.appendChild(tdNotIncludeOne);
+                    }
+                    
+                    tbody.appendChild(row);
+                }
+                            
+            } else {
+                console.error('Failed to upload file');
+            }
+        }*/
+        // Function to handle the response from the AJAX request
+function handleResponse(response) {
+    console.log("Response:", response);
+
+    // Ensure response contains the template and data properties
+    if (!response || !response.template || !Array.isArray(response.template) || response.template.length === 0) {
+        console.error('Invalid response format: Missing template');
+        return;
+    }
+    if (!response.data) {
+        console.error('Invalid response format: Missing data');
+        return;
+    }
+
+    let columnNameArray = [];
+    // Standard column names array
+    const stdColumnNameArray = ["Template Name", "Customer Code", "Customer Part Number", "Order Qty", "Delivery Date", "Delivery Time", "Delivery Plant"];
+    let hasNotIncudeOne = false;
+
+    // Extract relevant data
+    var template_info = response.template[0];
+    var column_details = template_info.columnDetails;
+    var data = response.data;
+
+    if (!column_details || !Array.isArray(column_details)) {
+        console.error('Invalid response format: Missing or invalid columnDetails');
+        return;
+    }
+
+    console.log("template_info:", template_info);
+    console.log("column_details:", column_details);
+    console.log("data:", data);
+
+    // Create table headers
+    var headerRow = document.getElementById("header-row");
+    headerRow.innerHTML = '';
+    headerRow.style.backgroundColor = "#9ABDDC";
+    var thTemplateName = document.createElement("th");
+    thTemplateName.textContent = "Template Name";
+    columnNameArray.push("Template Name");
+    headerRow.appendChild(thTemplateName);
+
+    for (var i = 0; i < column_details.length; i++) {
+        var columnName = column_details[i].columnName;
+        var th = document.createElement("th");
+        columnNameArray.push(columnName);
+        th.textContent = columnName;
+        headerRow.appendChild(th);
+    }
+
+    for (var i in stdColumnNameArray) {
+        if (!columnNameArray.includes(stdColumnNameArray[i])) {
+            var thNotIncludeOne = document.createElement("th");
+            thNotIncludeOne.textContent = stdColumnNameArray[i];
+            headerRow.appendChild(thNotIncludeOne);
+            hasNotIncudeOne = true;
+        }
+    }
+
+    var tbody = document.querySelector("#preview-table tbody");
+    var keys = Object.keys(data);
+    var firstKey = keys[0];
+
+    for (var i = 0; i < Object.values(data[firstKey]).length; i++) {
+        var row = document.createElement("tr");
+        row.style.backgroundColor = "#F5FBFF";
+        var tdTemplateName = document.createElement("td");
+        tdTemplateName.textContent = template_info.templateName;
+        row.appendChild(tdTemplateName);
+
+        for (var j = 0; j < column_details.length; j++) {
+            var columnNumber = column_details[j].columnNumber.toString();
+
+            // Create the table cell element
+            var td = document.createElement("td");
+
+            // Check if columnNumber is zero
+            if (columnNumber == "0") {
+                console.log("data[columnNumber][i] is null because columnNumber is 0");
+                td.textContent = "NULL";  // Set the textContent to null if columnNumber is 0
+            } else if (columnNumber.includes(",")) {  // Check for comma in columnNumber
+                columnNumber = columnNumber.split(",");
+                if (columnNumber[0] === columnNumber[1]) {
+                    columnNumber = columnNumber[0];  // Use the single value if they are the same
+                } else {
+                    console.log("Different columns found:", columnNumber);
+                    // Handle case where there are different column numbers, if needed
+                }
+                console.log("data[columnNumber][i]:", data[columnNumber][i]);
+                td.textContent = data[columnNumber][i];
+            } else {
+                console.log("data[columnNumber][i]:", data[columnNumber][i]);
+                td.textContent = data[columnNumber][i];
+                 
+            }
+
+            row.appendChild(td);
+        }
+
+        if (hasNotIncudeOne) {
+            // var tdNotIncludeOne = document.createElement("td");
+            // tdNotIncludeOne.textContent = "NULL";
+            // row.appendChild(tdNotIncludeOne);
+        }
+        tbody.appendChild(row);
+    }
+}
+
+// Function to handle the response with conditions from the AJAX request
+function handleResponseCondition(response) {
+    console.log("Response:", response);
+
+    // Ensure response contains the template and result properties
+    if (!response || !response.template || !Array.isArray(response.template) || response.template.length === 0) {
+        console.error('Invalid response format: Missing template');
+        return;
+    }
+    if (!response.result) {
+        console.error('Invalid response format: Missing result');
+        return;
+    }
+
+    let columnNameArray = [];
+    // Standard column names array
+    const stdColumnNameArray = ["Template Name", "Customer Code", "Customer Part Number", "Order Qty", "Delivery Date", "Delivery Time", "Delivery Plant"];
+    let hasNotIncudeOne = false;
+
+    // Extract relevant data
+    var template_info = response.template[0];
+    var column_details = template_info.columnDetails;
+    var data = response.result;
+
+    if (!column_details || !Array.isArray(column_details)) {
+        console.error('Invalid response format: Missing or invalid columnDetails');
+        return;
+    }
+
+    console.log("template_info:", template_info);
+    console.log("column_details:", column_details);
+    console.log("data:", data);
+
+    // Create table headers
+    var headerRow = document.getElementById("header-row-condition");
+    headerRow.style.backgroundColor = "#fdfa72";
+    headerRow.innerHTML = '';
+    var thTemplateName = document.createElement("th");
+    thTemplateName.textContent = "Template Name";
+    columnNameArray.push("Template Name");
+    headerRow.appendChild(thTemplateName);
+
+    for (var i in stdColumnNameArray) {
+        if (!columnNameArray.includes(stdColumnNameArray[i])) {
+            var thNotIncludeOne = document.createElement("th");
+            thNotIncludeOne.textContent = stdColumnNameArray[i];
+            headerRow.appendChild(thNotIncludeOne);
+            hasNotIncudeOne = true;
+        }
+    }
+
+    var keys = Object.keys(data);
+    var firstKey = keys[0];
+
+    // Create table rows
+    var tbody = document.querySelector("#preview-table-condition tbody");
+    for (var i = 0; i < Object.values(data[firstKey]).length; i++) {
+        var row = document.createElement("tr");
+        row.style.backgroundColor = "#FFFEE0";
+        var tdTemplateName = document.createElement("td");
+        tdTemplateName.textContent = template_info.templateName;
+        row.appendChild(tdTemplateName);
+
+        for (var j = 0; j < column_details.length; j++) {
+            var columnNumber = column_details[j].columnNumber.toString();
+
+            // Create the table cell element
+            var td = document.createElement("td");
+
+            // Check if columnNumber is zero
+            if (columnNumber == "0") {
+                console.log("data[columnNumber][i] is null because columnNumber is 0");
+                td.textContent = "NULL";  // Set the textContent to null if columnNumber is 0
+            } else if (columnNumber.includes(",")) {  // Check for comma in columnNumber
+                columnNumber = columnNumber.split(",");
+                if (columnNumber[0] === columnNumber[1]) {
+                    columnNumber = columnNumber[0];  // Use the single value if they are the same
+                } else {
+                    console.log("Different columns found:", columnNumber);
+                    // Handle case where there are different column numbers, if needed
+                }
+                console.log("data[columnNumber][i]:", data[columnNumber][i]);
+                td.textContent = data[columnNumber][i];
+            } else {
+                console.log("data[columnNumber][i]:", data[columnNumber][i]);
+                td.textContent = data[columnNumber][i];
+            }
+
+            // Append the cell to the row
+            row.appendChild(td);
+        }
+
+        if (hasNotIncudeOne) {
+            // var tdNotIncludeOne = document.createElement("td");
+            // tdNotIncludeOne.textContent = "NULL";
+            // row.appendChild(tdNotIncludeOne);
+        }
+
+        tbody.appendChild(row);
+    }
+}
+
+
+        document.querySelector('#import-order-Form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var types = document.getElementsByName('templateType');
+        console.log("types: ",types)
+        var tempType;
+        for(var i = 0; i < types.length; i++){
+            if(types[i].checked){
+                tempType = types[i].value;
+            }
+        }
+        console.log("templateType: ",tempType);
+
+
+        var startDate = "";
+        if (tempType == "forecast-only") {
+            startDate = document.getElementById('start-date').value;
+        }
+
+        var fileInput = document.getElementById('importfile');
+
+        var file = fileInput.files[0];
+        if (!file) {
+            alert("Please select a file to import.");
+            return;
+        }
+        console.log("file ",file);
+
+        var templateSelectInput = document.getElementById('templateSelect');
+        var templateSelect = templateSelectInput.options[templateSelectInput.selectedIndex].value;
+
+        console.log("templateSelect ",templateSelect);
+
+        var formData = new FormData();
+        formData.append('templateType', tempType);
+        formData.append('file', file);
+        formData.append('templateSelect', templateSelect);
+        formData.append('startDate', startDate);
+
+        console.log("formData.templateType ",formData.get('templateType'));
+        console.log("formData.file ",formData.get('file'));
+        console.log("formData.templateSelect ",formData.get('templateSelect'));
+        console.log("formData.startDate ",formData.get('startDate'));
+
+        // Fetch CSRF token from cookie
+        var csrftoken = getCookie('csrftoken');
+
+        fetch('/handle_template_and_file/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': csrftoken
+            }
+        })
+        .then(response => {
+            console.log("response here ",response)
+            if (response.ok) {
+                return response.json();
+            } else {
+                window.alert("Incorrect template or file!");
+                throw new Error('Failed to upload file');
+                window.location.href = '/importOrder_form/';
+
+            }
+        })
+        .then(response => {
+                console.log("response is ", response);
+                handleResponse(response); // Call the function to handle the response
+                //document.getElementById('preview-table').style.backgroundColor = "#95D1E7";
+
+                handleResponseCondition(response); // Call the function to handle the response
+                //document.getElementById('preview-table-condition').style.backgroundColor = "yellow";
+                currentTemplateID = response.template[0].templateID;
+                console.log("currentTemplateID is ",currentTemplateID);
+                currentTemplateType = response.template[0].templateType;
+                console.log("currentTemplateType is ",currentTemplateType);
+                let data_submit_cancel_box = document.getElementById('data-submit-or-cancel-box');
+                data_submit_cancel_box.style.display = "block";
+                let import_orderfile_box = document.getElementById('import-orderfile-box');
+                import_orderfile_box.style.display = "none";
+
+                // Iterate through the rows and extract data
+                const tableRows = document.querySelectorAll("#preview-table-condition tbody tr");
+                tableRows.forEach(row => {
+                    console.log("customerPartNumber ",row.cells[2].textContent);
+                    console.log("customerPartNumber's length ",row.cells[2].textContent.length);
+                    let trimedStr = row.cells[2].textContent.trim();
+                    console.log("trimed string's length ",trimedStr.length);
+
+                    // Example usage:
+                    const inputDate =row.cells[4].textContent.trim();
+                    const outputDate = convertDateFormat(row.cells[4].textContent.trim());
+                    console.log(outputDate);  // Output: 20240405
+                    
+                });
+
+
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        function convertDateFormat(dateStr) {
+            // Regular expressions for different date formats
+            const yyyymmddRegex = /^\d{8}$/;
+            const ddmmyyyyRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+            const yyyymmddDashRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+            // Check if the date is already in YYYYMMDD format
+            if (yyyymmddRegex.test(dateStr)) {
+                return dateStr;
+            }
+
+            let formattedDate = dateStr;
+
+            // Convert DD/MM/YYYY to YYYYMMDD
+            if (ddmmyyyyRegex.test(dateStr)) {
+                const [day, month, year] = dateStr.split('/');
+                formattedDate = `${year}${month}${day}`;
+            } 
+            // Convert YYYY-MM-DD to YYYYMMDD
+            else if (yyyymmddDashRegex.test(dateStr)) {
+                const [year, month, day] = dateStr.split('-');
+                formattedDate = `${year}${month}${day}`;
+            }
+
+            return formattedDate;
+        }
+
+        
+
+
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function cancel_data(){
+            
+            let confirmation = "Are you sure you want to cancel?";
+            if (confirm(confirmation)==true){
+                window.location.href = '/importOrder_form/';
+            }
+            else {
+                //
+            }
+             
+        }
+
+        function submit_data(){
+           // Construct data to send to Django view
+            const requestData = {
+                customerOrders: [] // Array to hold customer order data
+            };
+
+            // Iterate through the rows and extract data
+            const tableRows = document.querySelectorAll("#preview-table-condition tbody tr");
+            tableRows.forEach(row => {
+                const customerOrder = {
+                    templateName: row.cells[0].textContent.trim(),
+                    customerCode: row.cells[1].textContent.trim(),
+                    customerPartNumber: row.cells[2].textContent.trim(),
+                    orderQuantity: row.cells[3].textContent.trim(),
+                    //deliveryDate: row.cells[4].textContent.trim(),
+                    deliveryDate: convertDateFormat(row.cells[4].textContent.trim()),
+                    deliveryTime: row.cells[5].textContent.trim(),
+                    deliveryPlant: row.cells[6].textContent.trim(),
+                    templateID: currentTemplateID,
+                };
+                requestData.customerOrders.push(customerOrder);
+            });
+            const csrftoken = getCookie('csrftoken');
+
+            console.log("currentTemplateType before request is ",currentTemplateType);
+            if(currentTemplateType == "Actual/FA"){
+                // Send data to Django view
+                fetch('/save_customer_orders/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.alert("Successful!")
+                    } else {
+                        console.error('Failed to save data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+            else if(currentTemplateType == "Forecast-Only"){
+                // Send data to Django view
+                fetch('/save_customer_orders_forecast/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.alert("Successful!")
+                    } else {
+                        console.error('Failed to save data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+            
+        }
+
+        function apply_conditions(check_status){
+            if (check_status.checked == true){
+                document.getElementById('preview-table-box').style.display = "block";
+                document.getElementById('preview-table-condition-box').style.display = "none";
+                document.getElementById('original-operated-checkbox-label').innerText = "See refined data";
+            }
+            else {
+                document.getElementById('preview-table-box').style.display = "none";
+                document.getElementById('preview-table-condition-box').style.display = "block";
+                document.getElementById('original-operated-checkbox-label').innerText = "See original data";
+            }
+            
+        }
+
+        //let myobj = {}
+        /*function manualDataEntry(){
+            let manualDataEntryBox = document.getElementById('manual-entry-box');
+            manualDataEntryBox.style.display = "block";
+            let import_orderfile_box = document.getElementById('import-orderfile-box');
+            import_orderfile_box.style.display = "none";
+            var tableContainer = document.getElementById('tableContainer');
+            tableContainer.style.display = "block";
+            
+            fetchCustomerNames(); 
+            fetchCustomerPartNumbers();
+        }
+        function fetchCustomerNames(){
+            fetch('/get_nsk_group_customers_master/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                
+                // Directly use the list of customer names
+                populateCustomerNames(data);
+            })
+            .catch(error => {
+                console.error('Error fetching customerNames: ', error);
+            });
+        }
+
+        function populateCustomerNames(custNames){
+            var customerSelect = document.getElementById('customerSelect');
+
+            // Clear existing options
+            customerSelect.innerHTML = '';
+
+            // Iterate over the list and create options
+            for (var i = 0; i < custNames.length; i++) {
+                var option = document.createElement('option');
+                option.value = custNames[i];
+                option.textContent = custNames[i];
+                customerSelect.appendChild(option);
+            }
+        }
+        var customerName = document.getElementById('customerSelect').value;
+
+        function fetchCustomerPartNumbers(){
+            fetch('/mget_all_customer_Part_Numbers_master/{customerName}')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                
+                // Directly use the list of customer names
+                populateCustomerPartNumbers(data);
+            })
+            .catch(error => {
+                console.error('Error fetching customerNames: ', error);
+            });
+        }
+
+        function CustomerPartNumbers(partNumbers){
+            var partNoSelect = document.getElementById('partNoSelect')
+
+            // Clear existing options
+            partNoSelect.innerHTML = '';
+
+            // Iterate over the list and create options
+            for (var i = 0; i < partNumbers.length; i++) {
+                var option = document.createElement('option');
+                option.value = partNumbers[i];
+                option.textContent = partNumbers[i];
+                partNoSelect.appendChild(option);
+            }
+        }*/
+        function manualDataEntry() {
+            let manualDataEntryBox = document.getElementById('manual-entry-box');
+            manualDataEntryBox.style.display = "block";
+            let import_orderfile_box = document.getElementById('import-orderfile-box');
+            import_orderfile_box.style.display = "none";
+            var tableContainer = document.getElementById('tableContainer');
+            tableContainer.style.display = "block";
+
+            fetchCustomerNames(); 
+        }
+
+        function fetchCustomerNames() {
+            fetch('/get_nsk_group_customers_master/')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                populateCustomerNames(data);
+            })
+            .catch(error => {
+                console.error('Error fetching customerNames: ', error);
+            });
+        }
+
+        function populateCustomerNames(custNames) {
+            var customerSelect = document.getElementById('customerSelect');
+
+            // Clear existing options
+            customerSelect.innerHTML = '';
+
+            // Iterate over the list and create options
+            for (var i = 0; i < custNames.length; i++) {
+                var option = document.createElement('option');
+                option.value = custNames[i];
+                option.textContent = custNames[i];
+                customerSelect.appendChild(option);
+            }
+            console.log("customerSelect.value is ",customerSelect.value);
+
+            // Add event listener for change event
+            customerSelect.addEventListener('change', function() {
+                fetchCustomerPartNumbers(customerSelect.value);
+            });
+
+            // Optionally trigger the change event to load part numbers for the first customer
+            if (custNames.length > 0) {
+                console.log("custNames[0]: ",custNames[0]);
+                fetchCustomerPartNumbers(custNames[0]);
+            }
+        }
+
+        function fetchCustomerPartNumbers(customerCode) {
+            fetch(`/get_all_customer_Part_Numbers_master/${customerCode}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                populateCustomerPartNumbers(data);
+            })
+            .catch(error => {
+                console.error('Error fetching customer part numbers: ', error);
+            });
+        }
+
+        function populateCustomerPartNumbers(partNumbers) {
+            var partNoSelect = document.getElementById('partNoSelect');
+
+            // Clear existing options
+            partNoSelect.innerHTML = '';
+
+            // Iterate over the list and create options
+            for (var i = 0; i < partNumbers.length; i++){
+                var option = document.createElement('option');
+                option.value = custNames[i];
+                option.textContent = custNames[i];
+                partNoSelect.appendChild(option);
+            }
+            }
+
+
+
+
+
+        function generateTable(){
+            let rowNum = parseFloat(document.getElementById('row_nums').value);
+            if (isNaN(rowNum) || rowNum < 1) {
+                alert("Please enter a valid number of rows.");
+                return;
+            }
+            let tableContainer = document.getElementById('tableContainer');
+            tableContainer.style.display = "block";
+            let submit_reset_div = document.getElementById('submit-reset-div');
+            submit_reset_div.style.display = "block";
+            
+            let tbody = document.getElementById('tbody');
+            for (var j = 0; j < rowNum; j++) {
+                let tr = document.createElement('tr');
+                
+                for (var k = 0; k < 7; k++) {
+                    let td = document.createElement('td');
+                    
+                    let inputElement = document.createElement('input');
+                    inputElement.classList.add("input-cell");
+                    inputElement.type = "text";
+                    inputElement.name = "cell" + (j+1) + "_" + (k+1);
+                    td.appendChild(inputElement);
+                    tr.appendChild(td);
+                }
+                
+                let deltd = document.createElement('td');
+                let delBtn = document.createElement('button');
+                delBtn.classList.add("del-row");
+                delBtn.innerText = "Remove";
+                deltd.appendChild(delBtn);
+                tr.appendChild(deltd);
+                
+                tbody.appendChild(tr);
+            }
+            
+            tbody.addEventListener('click', function(event) {
+                if (event.target.classList.contains('del-row')) {
+                    deleteRow(event.target);
+                }
+            });
+        }
+
+
+        function addRow() {
+            var table = document.getElementById('myTable').getElementsByTagName('tbody')[0];
+            if (!table) return;
+
+            let submit_reset_div = document.getElementById('submit-reset-div');
+            submit_reset_div.style.display = "block";
+
+            var rowCount = table.rows.length;
+            var newRow = table.insertRow(rowCount);
+
+            for (var i = 0; i < 7; i++) {
+                var cell = newRow.insertCell(i);
+                var input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'cell' + rowCount + '_' + (i+1);
+                input.className = 'input-cell';
+                cell.appendChild(input);
+            }
+
+            var delCell = newRow.insertCell(7);
+            let delBtn = document.createElement('button');
+            delBtn.classList.add("del-row");
+            delBtn.name = "del-row" + rowCount;
+            delBtn.innerText = "Remove";
+            delBtn.onclick = function() {
+                deleteRow(this);
+            };
+            delCell.appendChild(delBtn);
+        }
+
+
+        function getDataFromCells() {
+            var table = document.getElementById('myTable');
+            var data = [];
+
+            // Loop through each row in the table body
+            var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var rowData = [];
+
+                // Loop through each cell in the row
+                var cells = row.getElementsByTagName('td');
+                for (var j = 0; j < cells.length-1; j++) {
+                    var cell = cells[j];
+                    var input = cell.getElementsByClassName('input-cell')[0];
+                    console.log("input is ",input.value);
+                    rowData.push(input.value);
+                }
+
+                // Add row data to the main data array
+                data.push(rowData);
+            }
+
+            return data;
+        }
+
+        document.getElementById('manual-data-submit').addEventListener('click', function() {
+            var allData = getDataFromCells();
+            console.log(allData); // Ensure you're getting the correct data
+            var formattedData = formatData(allData); // Convert data into the required format
+            saveCustomerOrders(formattedData); // Call function to save customer orders
+        });
+
+        function formatData(allData) {
+            var formattedData = [];
+
+            // Iterate through each row of allData
+            for (var i = 0; i < allData.length; i++) {
+                var rowData = allData[i];
+                // Create an object for each row
+                var customerOrder = {
+                    templateName: rowData[0],
+                    customerCode: rowData[1],
+                    customerPartNumber: rowData[2],
+                    orderQuantity: rowData[3],
+                    deliveryDate: rowData[4],
+                    deliveryTime: rowData[5],
+                    deliveryPlant: rowData[6],
+                    templateID: 99,
+                };
+                // Push the object into formattedData array
+                formattedData.push(customerOrder);
+            }
+
+            return formattedData;
+        }
+
+        function saveCustomerOrders(requestData) {
+            const csrftoken = getCookie('csrftoken');
+
+            // Send data to Django view
+            fetch('/save_customer_orders/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ customerOrders: requestData })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.alert("Successful!");
+                    //clear the data after submission to aovid duplicate submission
+                    const manual_table_current_data = document.querySelectorAll("#myTable tbody tr");
+                        manual_table_current_data.forEach(row => {
+                        // Loop through each cell in the row
+                        for (let i = 0; i < row.cells.length-1; i++) {
+                            // Clear the text content
+                            row.cells[i].textContent = '';
+
+                            // Create a new input element
+                            const input = document.createElement('input');
+                            input.className = 'input-cell'; // Assign the class to style if needed
+                            input.type = 'text'; // Set the input type as per your requirement
+
+                            // Append the input element to the cell
+                            row.cells[i].appendChild(input);
+                        }
+                    });
+                } else {
+                    console.error('Failed to save data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function back_to_template_import(){
+            window.location.href = '/importOrder_form/';
+        }
+
+        function reset() {
+            let confirmation = "Are you sure you want to clear all cells?";
+            if (confirm(confirmation)==true){
+                const manual_table_current_data = document.querySelectorAll("#myTable tbody tr");
+                manual_table_current_data.forEach(row => {
+                // Loop through each cell in the row
+                for (let i = 0; i < row.cells.length-1; i++) {
+                    // Clear the text content
+                    row.cells[i].textContent = '';
+
+                    // Create a new input element
+                    const input = document.createElement('input');
+                    input.className = 'input-cell'; // Assign the class to style if needed
+                    input.type = 'text'; // Set the input type as per your requirement
+
+                    // Append the input element to the cell
+                    row.cells[i].appendChild(input);
+                }
+            });
+            }
+            else {
+                //
+            }
+            
+        }
+        function deleteRow(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        
+    </script>
+
+</body>
+</html>

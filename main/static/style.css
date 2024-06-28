@@ -1,0 +1,29 @@
+.navbar-nav {
+    display: flex;
+    justify-content: space-between; /* Aligns items on opposite ends */
+    list-style-type: none;
+    padding: 0;
+  }
+  
+.nav-item {
+    margin-right: 10px; /* Adjust as needed */
+}
+
+  
+.login {
+    margin-left: auto; /* Pushes the login link to the right */
+    color: red;
+}
+#navbarNav{
+    width: 100%;
+}
+.nav_left_side{
+    width: 40%;
+}
+.nav_right_side{
+    width: 60%;
+    float: right;
+}
+#login-form-container{
+    width: 100%;
+}

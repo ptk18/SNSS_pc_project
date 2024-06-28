@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding-top: 2%;
+    }
+    .signup-container {
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .signup-container h2 {
+        text-align: center;
+    }
+    .signup-container input[type="email"],
+    .signup-container input[type="text"],
+    .signup-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .signup-container input[type="submit"] {
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .signup-container input[type="submit"]:hover {
+        background-color: #95D1E7;
+        color: black;
+    }
+    .error-border {
+    border-color: red; /* Change border color to red for error */
+    }
+
+    .error-message {
+        color: red; /* Set color of error message to red */
+        font-size: 14px; /* Adjust font size of error message */
+        margin-top: 5px; /* Add some space between password field and error message */
+        display: none; /* Hide error message by default */
+    }
+</style>
+</head>
+<body>
+
+<div class="signup-container">
+    <h2>Create Your Account</h2>
+    <form id="signupForm" method="POST" action="/signup_user/">
+        {% csrf_token %}
+
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname" required><br>
+
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <p id="sign-up-email-error" class="error-message"></p>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <p id="sign-up-password-error" class="error-message"></p>
+
+        <label for="cpassword">Confirm Password:</label>
+        <input type="password" id="cpassword" name="cpassword" required>
+        <span id="confirmPasswordError" class="error"></span><br><br>
+
+        <label for="department" style="text-align: center;"><span>Department:</span></label>
+            <select name="department" id="selectDepartment" style="margin: auto; width: 205px;" form="signupForm">
+                <option value="engineering">Engineering</option>
+                <option value="hr">Administration & HR</option>
+                <option value="accounting">Accounting</option>
+                <option value="pc">Production Control</option>
+            </select><br><br>
+
+        <input type="submit" value="Sign Up" id="sign-up-btn">
+    </form>
+</div>
+
+<!--script>
+    const validateEmail = (email) => {
+    return String(email)
+        .toLowerCase()
+        .match(/^[a-zA-Z][^\s@]+@nsk\.com$/);
+    };
+
+    document.querySelector('#signupForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        var fname = document.getElementById("fname").value;
+        var lname = document.getElementById("lname").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        var con_password = document.getElementById("cpassword").value;
+        var department = document.getElementById("selectDepartment").value;
+
+        let passwordError = document.getElementById('sign-up-password-error');
+        let emailError = document.getElementById('sign-up-email-error');
+        var confirmPasswordError = document.getElementById('confirmPasswordError');
+        
+        // Check if email is valid
+        if (!validateEmail(email)) {
+            document.getElementById("email").classList.add('error-border');
+            emailError.innerHTML = "Please enter a valid email address.";
+            emailError.style.display = "block";
+            return;
+        }
+
+        // Define the regular expression pattern for password
+        let passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+
+        // Check if the password meets the required length
+        if (password.length < 6 || password.length > 16) {
+            document.getElementById("password").classList.add('error-border');
+            passwordError.innerHTML = "Password must be between 6 and 16 characters.";
+            passwordError.style.display = "block";
+            return;
+        }
+
+        // Check if the password contains at least one number and one special character
+        if (!passwordRegex.test(password)) {
+            document.getElementById("password").classList.add('error-border');
+            passwordError.innerHTML = "Password should contain at least one number and one special character.";
+            passwordError.style.display = "block";
+            return;
+        }
+
+        // Check if password and confirmed password match
+        if (password !== con_password) {
+            confirmPasswordError.textContent = "Passwords do not match";
+            return;
+        }
+
+        // If email or password is incorrect, alert user
+        //alert("Sign up successful");
+
+        // If email and password are valid, remove error styling and message
+        document.getElementById("email").classList.remove('error-border');
+        emailError.innerHTML = "";
+        emailError.style.display = "none";
+        document.getElementById("password").classList.remove('error-border');
+        passwordError.innerHTML = "";
+        passwordError.style.display = "none";
+
+        // Submit the form
+        //this.submit();
+
+        console.log("First name: ", fname);
+        console.log("Last name: ", lname);
+        console.log("Email: ", email);
+        console.log("Password: ", password);
+        console.log("Confirm Password: ", con_password);
+        console.log("Department: ", department);
+
+        /*var user = new User();
+        User.append('fname', fname);
+        formData.append('lname', lname);
+        formData.append('email',email);
+        formData.append('password',password);
+        formData.append('department',department);
+
+        fetch('/signup/', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            else {
+                throw new Error('Failed to create user');
+            }
+        })
+        .then(data => {
+            console.log("Data message: ",data.message);
+        })
+        .catch(error => {
+            console.error('Error: ', error);
+        });*/
+    });
+
+</script>-->
+
+</body>
+</html>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Data</title>
+    <!-- Bootstrap Links -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Jquery to make bootstrap work correctly -->
+    <script src="{% static 'jquery/dist/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+
+    <!-- Stylesheet Link -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+    .navbar-nav li a{
+        color: white;
+    }
+    .navbar-nav li a:hover{
+        color: rgba(255, 255, 255, 0.471);
+    }
+    #master-data-dropdown .dropdown-menu a {
+        color: white;
+    }
+    #master-data-dropdown .dropdown-menu a:hover{
+        color: black;
+    }
+    /* Show dropdown menu on hover */
+    #master-data-dropdown:hover .dropdown-menu {
+    display: block;
+    background-color: black;
+    opacity: 0.8;
+    }
+
+    /* Hide dropdown menu by default */
+    .dropdown-menu {
+        display: none;
+    }
+    body {
+        font-family: Arial, sans-serif;
+
+    }
+    .customer-data-container{
+        width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+    .customer-data-container input[type="text"],
+    .customer-data-container select {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .customer-data-container input[type="submit"]{
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 14px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 45px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    table{
+        width: 100%;
+    }
+    th,td {
+        height: 30px;
+        text-align: center;
+    }
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    .editDelDiv{
+        display: flex;
+        width: 100%;
+    }
+    .editbtn{
+        flex: 6;
+        width: 100%;
+        background-color: #49CA3E;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 25px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    .delbtn{
+        flex: 6;
+        width: 100%;
+        background-color: red;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 25px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    
+
+    </style>
+</head>
+<body>
+    {% include 'base.html' %}  
+    <div class="data-container" style="display: flex;" >
+        <div style=" flex: 9;  padding: 5px;"  id="preview-data-box">
+            <h3 style="font-weight: bold; ">Customer Data</h3>
+
+            <div id="tableContainer" style="padding: 5px; " >
+                <table id="customerdataTable" >
+                    <thead>
+                        <tr style="background-color: #FFBF00;">
+                            <th>Customer Name</th>
+                            <th>Customer Code</th>
+                            <th>Template Name</th>
+                            <th>Customer Part Number</th>
+                            <th>SNSS Part Number</th>
+                            <th>Category</th>
+                            <th>Edit/Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerdataTable-tbody">
+
+                    </tbody>     
+                </table>
+            </div>
+
+        </div>
+        <div class="customer-data-container" style=" flex: 3; margin-top: 10px;">
+            <div id="customer-data-box" >
+                <div style="height: 50px; background-color: #ffc2d296; margin: 0 auto;">
+                    <h4 style="text-align: center;  padding-top: 10px;">Enter Customer Data</h4>
+                </div>
+                <hr>
+                <form id="customer-data-Form" enctype="multipart/form-data" style="margin-top: 10px;">
+                    {% csrf_token %}
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Choose Customer Category</label><br>
+                    <div style=" margin: 5px; z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; top: -15px; position: relative; padding: 12px; font-size: 14px;">
+                            <input type="radio" id="general" name="group-category" value="GEN" onclick="getChecked(1)" checked>
+                            <label for="general">General Customers</label><br>
+
+                            <input type="radio" id="nsk-group" name="group-category" value="NSK" onclick="getChecked(2)">
+                            <label for="nsk-group">NSK Group Customers</label>
+                    </div>
+                    <label for="customerName">Customer Name:</label><br>
+                    <input type="text" id="customerName" name="customerName"><br>
+
+                    <label for="customerCode">Customer Code:</label><br>
+                    <input type="text" id="customerCode" name="customerCode"><br>
+
+                    <label for="templateSelect">Template Name:</label><br>
+                    <select name="templateSelect" id="templateSelect" >
+                        <option value="">FORD_Domestic</option>
+                        <option value="">FORD_Export</option>
+                    </select>
+                    <select name="templateSelect-global" id="templateSelect-global" style="display: none;">
+                        <option value="">GLOBAL</option>
+                    </select>
+                    <br>
+                    <label for="customerPartNo">Customer Part Number:</label><br>
+                    <input type="text" id="customerPartNo" name="customerPartNo"><br>
+
+                    <label for="SNSSPartNo">SNSS Part columnNumber:</label><br>
+                    <input type="text" id="SNSSPartNo" name="SNSSPartNo"><br>
+
+                    <input type="submit" value="Submit" id="submit-btn">
+
+                </form>
+
+                <form id="edit-customer-data-Form" enctype="multipart/form-data" style="display: none;">
+                    {% csrf_token %}
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Choose Customer Category</label><br>
+                    <div style=" margin: 5px; z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; top: -15px; position: relative; padding: 12px; font-size: 14px;">
+                            <input type="radio" id="editgeneral" name="group-category" value="GEN" >
+                            <label for="editgeneral">General Customers</label><br>
+
+                            <input type="radio" id="editnsk-group" name="group-category" value="NSK">
+                            <label for="editnsk-group">NSK Group Customers</label>
+                    </div>
+        
+                    <label for="editcustomerName">Customer Name:</label><br>
+                    <input type="text" id="editcustomerName" name="editcustomerName"><br>
+
+                    <label for="editcustomerCode">Customer Code:</label><br>
+                    <input type="text" id="editcustomerCode" name="editcustomerCode"><br>
+
+                    <label for="edittemplateSelect">Template Name:</label><br>
+                    <select name="edittemplateSelect" id="edittemplateSelect" >
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+                    <select name="edittemplateSelect-global" id="edittemplateSelect-global" style="display: none;">
+                        <option value="">GLOBAL</option>
+                    </select>
+                    <br>
+
+                    <label for="editcustomerPartNo">Customer Part Number:</label><br>
+                    <input type="text" id="editcustomerPartNo" name="editcustomerPartNo"><br>
+
+                    <label for="editSNSSPartNo">SNSS Part columnNumber:</label><br>
+                    <input type="text" id="editSNSSPartNo" name="editSNSSPartNo"><br>
+
+                    <input type="submit" value="Edit" id="edit-submit-btn" style="background-color: #FF5B00; color: white;">
+
+                </form>
+    
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function selectOnlyThis(id){
+            var myCheckbox = document.getElementsByName("group-category");
+            Array.prototype.forEach.call(myCheckbox,function(el){
+                el.checked = false;
+            });
+            id.checked = true;
+        }
+        let btnChecked = "";
+
+        function getChecked(i) {
+            console.log("btnChecked: ", btnChecked)
+            if (btnChecked == i) {
+                document.getElementsByTagName("input")[i-1].checked = false;      
+            }
+            else {
+                btnChecked = i;
+            }
+            if (btnChecked == 1) {
+                document.getElementById('templateSelect').style.display = "block";
+                document.getElementById('templateSelect-global').style.display = "none";
+                fetchTemplateNames_IDs();
+                btnChecked == ""
+            }
+            else if (btnChecked == 2) {
+                document.getElementById('templateSelect').style.display = "none";
+                document.getElementById('templateSelect-global').style.display = "block";
+                document.getElementById('customerName').value = 'GLOBAL';
+                btnChecked == ""
+            }         
+        }
+
+        $(document).ready(function() {
+                $('#home-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/main';
+                });
+            });
+
+            $(document).ready(function() {
+                $('#import-order-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/importOrder_form';
+                });
+            });
+            $(document).ready(function() {
+                $('#templates-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/templates'; 
+                });
+            });
+            $(document).ready(function() {
+                $('#order-plan-tab').click(function(e) {
+                    e.preventDefault();
+                    window.location.href = '/orderPlan_form'; 
+                });
+            });
+            $('#master-customer-data-tab').click(function(e) {
+                e.preventDefault();
+                window.location.href = '/master_customer_data'; 
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                //fetchTemplateNames_IDs();
+                fetchCustomerDataFromDB();
+            });
+
+            function fetchCustomerDataFromDB() {
+                fetch('/get_all_customer_data/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    populateCustomerData(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching customer data: ', error);
+                });
+            }
+
+            function populateCustomerData(custData){
+                const customertableBody = document.getElementById("customerdataTable-tbody");
+                fetchTemplateNames_IDs();
+
+                for (const cdata of custData) {
+                    let tableRow = document.createElement('tr');
+                    
+                    let customerNametd = document.createElement('td');
+                    customerNametd.innerText = cdata.customerName;
+                    tableRow.appendChild(customerNametd);
+                    
+                    let customerCodetd = document.createElement('td');
+                    customerCodetd.innerText = cdata.customerCode;
+                    tableRow.appendChild(customerCodetd);
+                    
+                    let templateNametd = document.createElement('td');
+                    templateNametd.innerText = cdata.templateName;
+                    tableRow.appendChild(templateNametd);
+                    
+                    let customerPartNotd = document.createElement('td');
+                    customerPartNotd.innerText = cdata.customerPartNo;
+                    tableRow.appendChild(customerPartNotd);
+                    
+                    let SNSSPartNotd = document.createElement('td');
+                    SNSSPartNotd.innerText = cdata.SNSSPartNo;
+                    tableRow.appendChild(SNSSPartNotd);
+
+                    let categorytd = document.createElement('td');
+                    categorytd.innerText = cdata.category;
+                    tableRow.appendChild(categorytd);
+
+                    let editDeltd = document.createElement('td');
+                    let editDelDiv = document.createElement('div');
+                    editDelDiv.classList.add = "editDelDiv";
+                    editDelDiv.style.padding = 5 + "px";
+
+                    let editbtn = document.createElement('button');
+                    editbtn.classList.add = "editbtn";
+                    editbtn.style.backgroundColor = "#49CA3E";
+                    editbtn.style.color = "white";
+                    editbtn.style.fontSize = 14 + "px";
+                    editbtn.textContent = "Edit";
+                    editbtn.style.width = "45%";
+                    editbtn.style.border = "none";
+                    editbtn.style.margin = 1 + "px";
+                    editbtn.style.boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
+
+                    let customerID = cdata.id;
+
+                     // Attach click event listener to edit button
+                    editbtn.addEventListener('click', function() {
+                        // Implement logic to populate form fields with data from cdata
+                        document.getElementById('customer-data-Form').style.display = "none";
+                        document.getElementById('edit-customer-data-Form').style.display = "block";
+
+                        document.getElementById('editcustomerName').value = cdata.customerName;
+                        document.getElementById('editcustomerCode').value = cdata.customerCode;
+                        document.getElementById('editcustomerPartNo').value = cdata.customerPartNo;
+                        document.getElementById('editSNSSPartNo').value = cdata.SNSSPartNo;
+
+                        let general = document.getElementById('editgeneral').value;
+                        let nsk = document.getElementById('editnsk-group').value;
+
+                        if (cdata.category == general){
+                            document.getElementById('editgeneral').checked = true;
+                            // Assuming 'templateSelect' is a select element
+                            
+                            document.getElementById('edittemplateSelect').style.display = "block";
+                            document.getElementById('edittemplateSelect-global').style.display = "none";
+                            console.log("cdata.templateID is ",cdata.templateID);
+                            console.log("cdata.templateName is ",cdata.templateName);
+                            //console.log("before ",document.getElementById('edittemplateSelect'));
+                            document.getElementById('edittemplateSelect').value = cdata.templateID;
+                        }
+                        
+                        else{
+                            console.log("cdata.category: ",cdata.category);
+                            console.log("cdata.category == nsk ",cdata.category == nsk);
+                            document.getElementById('editnsk-group').checked = true;
+                            document.getElementById('edittemplateSelect').style.display = "none";
+                            console.log(document.getElementById('edittemplateSelect-global'));
+                            document.getElementById('edittemplateSelect-global').style.display = "block";
+                        }
+                        
+                        document.querySelector('#edit-customer-data-Form').addEventListener('submit', function(event) {
+                            event.preventDefault(); // Prevent default form submission
+
+                            let general_cat = document.getElementById('editgeneral').checked;
+                            let nsk_cat = document.getElementById('editnsk-group').checked;
+
+                            let general_cat_em = document.getElementById('editgeneral');
+                            let nsk_cat_em = document.getElementById('editnsk-group');
+                            let category = '';
+                            let selectedTemplateId = '';
+                            let templateID = '';
+                            let templateName = '';
+                            if (general_cat){
+                                category = general_cat_em.value;
+                                //document.getElementById('edittemplateSelect').style.display = "block";
+                                //document.getElementById('edittemplateSelect-global').style.display = "none";
+                                selectedTemplateId = document.getElementById('edittemplateSelect').value;
+                                templateID = document.getElementById('edittemplateSelect').value;
+                                templateName = document.getElementById(selectedTemplateId).textContent;
+                                
+                            }
+                            else{
+                                category = nsk_cat_em.value;
+                                document.getElementById('edittemplateSelect').style.display = "none";
+                                document.getElementById('edittemplateSelect-global').style.display = "block";
+                                //selectedTemplateId = document.getElementById('edittemplateSelect-global').value;
+                                templateID = 'NULL';
+                                templateName = 'GLOBAL';
+                            }
+
+                            let customerName = document.getElementById('editcustomerName').value;
+                            let customerCode = document.getElementById('editcustomerCode').value;
+                            console.log("selectedtemplateID ",selectedTemplateId);
+
+                            let customerPartNo = document.getElementById('editcustomerPartNo').value;
+                            let SNSSPartNo = document.getElementById('editSNSSPartNo').value;
+                            
+
+                            // Construct data to send to Django view
+                            const requestData = {
+                                'customerName' : customerName,
+                                'customerCode' : customerCode,
+                                'templateName' : templateName,
+                                'customerPartNo' : customerPartNo,
+                                'SNSSPartNo' : SNSSPartNo,
+                                'category' : category,
+                                'templateID' : templateID,
+                            };
+
+                            const csrftoken = getCookie('csrftoken');
+
+                            // Send data to Django view
+                            fetch(`/update_customer_data/${customerID}/`, {
+                                method: 'POST', // Change to 'POST' or 'PUT' based on your backend implementation
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrftoken
+                                },
+                                body: JSON.stringify(requestData)
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    window.alert("Successfully Updated!");
+                                    window.location.href = '/master_customer_data';
+                                } else {
+                                    console.error('Failed to update data');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            }); 
+
+                        });
+
+
+                    });
+                    editDelDiv.appendChild(editbtn);
+
+                    let delbtn = document.createElement('button');
+                    delbtn.classList.add = "delbtn";
+                    delbtn.textContent = "Del";
+                    delbtn.style.backgroundColor = "red";
+                    delbtn.style.color = "white";
+                    delbtn.style.fontSize = 14 + "px";
+                    delbtn.style.width = "45%";
+                    delbtn.style.border = "none";
+                    delbtn.style.margin = 1 + "px";
+                    delbtn.style.boxShadow = "rgba(0, 0, 0, 0.24) 0px 3px 8px";
+
+                    // Attach click event listener to delete button
+                    delbtn.addEventListener('click', function() {
+                        // Confirm deletion
+                        if (confirm("Are you sure you want to delete this customer data?")) {
+                            const csrftoken = getCookie('csrftoken');
+
+                            fetch(`/delete_customer_data/${customerID}/`, {
+                                method: 'DELETE', 
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrftoken
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    window.alert("Successfully Deleted!");
+                                    window.location.href = '/master_customer_data';
+                                } else {
+                                    console.error('Failed to delete data');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            }); 
+                        }
+                    });
+                    editDelDiv.appendChild(delbtn);
+
+                    editDeltd.appendChild(editDelDiv);
+                    tableRow.appendChild(editDeltd);
+                    
+                    customertableBody.appendChild(tableRow);
+                }
+            }
+
+
+
+            function fetchTemplateNames_IDs() {
+                fetch('/get_all_template_names_IDs/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log("data after fectching name is " ,data)
+                    populateTemplateNames(data);
+                    populateEditTemplateNames(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching templates: ', error);
+                });
+            }
+            function populateTemplateNames(templates){
+                var templateSelect = document.getElementById('templateSelect');
+
+                // Clear existing options
+                templateSelect.innerHTML = '';
+
+                // Add each template name as an option
+                for (var key in templates) {
+                    if (templates.hasOwnProperty(key)) {
+                        var option = document.createElement('option');
+                        option.id = key;
+                        option.value = key; // Set value to template ID
+                        option.textContent = templates[key]; // Set display text to template name
+                        templateSelect.appendChild(option);
+                    }
+                }
+            }
+            function populateEditTemplateNames(templates){
+                var edittemplateSelect = document.getElementById('edittemplateSelect');
+
+                // Clear existing options
+                edittemplateSelect.innerHTML = '';
+
+                // Add each template name as an option
+                for (var key in templates) {
+                    if (templates.hasOwnProperty(key)) {
+                        var option = document.createElement('option');
+                        option.id = key;
+                        option.value = key; // Set value to template ID
+                        option.textContent = templates[key]; // Set display text to template name
+                        edittemplateSelect.appendChild(option);
+                    }
+                }
+            }
+
+
+            // Function to get CSRF token from cookie
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+        document.querySelector('#customer-data-Form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            let general_cat = document.getElementById('general').checked;
+            let nsk_cat = document.getElementById('nsk-group').checked;
+
+            let general_cat_em = document.getElementById('general');
+            let nsk_cat_em = document.getElementById('nsk-group');
+            console.log("general_cat ",general_cat);
+            console.log("nsk_cat ",nsk_cat);
+            console.log("general_cat.vale is ",general_cat_em.value);
+            console.log("nsk_cat.value is ", nsk_cat_em.value);
+            let category = ''
+            let selectedTemplateId = ''
+            let templateID = ''
+            let templateName = ''
+
+            if (general_cat){
+                category = general_cat_em.value;
+                selectedTemplateId = document.getElementById('templateSelect').value;
+                templateID = document.getElementById('templateSelect').value;
+                templateName = document.getElementById(selectedTemplateId).textContent;
+            }
+            else{
+                category = nsk_cat_em.value;
+                //selectedTemplateId = document.getElementById('templateSelect-global').value;
+                //selectedTemplateId = document.getElementById('templateSelect-global').value;
+                templateName = 'GLOBAL';
+                templateID = 'NULL';
+            }
+            console.log("category ",category);
+
+            let customerName = document.getElementById('customerName').value;
+            let customerCode = document.getElementById('customerCode').value;
+
+            
+            
+
+            let customerPartNo = document.getElementById('customerPartNo').value;
+            let SNSSPartNo = document.getElementById('SNSSPartNo').value;
+            //let templateID = document.getElementById('templateSelect').value;
+            
+
+            // Construct data to send to Django view
+            const requestData = {
+                'customerName' : customerName,
+                'customerCode' : customerCode,
+                'templateName' : templateName,
+                'customerPartNo' : customerPartNo,
+                'SNSSPartNo' : SNSSPartNo,
+                'category' : category,
+                'templateID' : templateID,
+            };
+
+            const csrftoken = getCookie('csrftoken');
+
+            // Send data to Django view
+            fetch('/save_customer_data/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.alert("Successfully created!");
+                    window.location.href = '/master_customer_data';
+                } else {
+                    console.error('Failed to save data');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            }); 
+
+        });
+    </script>
+</body>
+</html>

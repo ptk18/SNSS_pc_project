@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Plan</title>
+    <!-- Bootstrap Links -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Jquery to make bootstrap work correctly -->
+    <script src="{% static 'jquery/dist/jquery.slim.min.js' %}"></script>
+    <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+
+    <!-- Stylesheet Link -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <style>
+    .navbar-nav li a{
+        color: white;
+    }
+    .navbar-nav li a:hover{
+        color: rgba(255, 255, 255, 0.471);
+    }
+    #master-data-dropdown .dropdown-menu a {
+        color: white;
+    }
+    #master-data-dropdown .dropdown-menu a:hover{
+        color: black;
+    }
+    /* Show dropdown menu on hover */
+    #master-data-dropdown:hover .dropdown-menu {
+    display: block;
+    background-color: black;
+    opacity: 0.8;
+    }
+
+    /* Hide dropdown menu by default */
+    .dropdown-menu {
+        display: none;
+    }
+    body {
+        font-family: Arial, sans-serif;
+
+    }
+    .view-check-short-table-container input[type="submit"]{
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 14px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 45px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    select {
+        padding: 10px;
+        border: 1px solid #95D1E7; 
+        border-radius: 5px; 
+        background-color: #fff; 
+        width: 100%;;
+    }
+    table{
+        width: 100%;
+    }
+    th,td {
+        height: 30px;
+        font-size: 14px;
+    }
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    .customer-th {
+        width: 100px; /* Set the width to 100 pixels */
+        white-space: nowrap; /* Prevent text from wrapping */
+        overflow: hidden; /* Hide overflow */
+        text-overflow: ellipsis; /* Display ellipsis for overflowed text */
+    }
+    .select-highlight:hover{
+        background-color: #a8a8a883;
+    }
+    #stockButton{
+        width: 100%;
+        background-color: #FF5B00;
+        color: white;
+        padding: 14px 14px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        height: 45px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .modal-content input[type="file"]{
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .modal-content input[type="submit"]{
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    </style>
+</head>
+<body>
+    {% include 'base.html' %}  
+    <div style="display: flex; margin-top: 5px;" class="view-check-short-table-container">
+        <div style="flex: 6">
+            <br>
+            <h1 style="padding-left: 3px;">Customer Order Plan</h1>
+        </div>
+        <div style="flex: 2; padding-right: 5px;">
+            <label for="customerSelect" style="font-weight: bold;">Select Customer:</label><br>
+            <select id="customerSelect" name="customerSelect" style="margin-top: 5px;">
+            </select>
+        </div>
+        <div style="flex: 2; padding-right: 5px;">
+            <label for="timeSelect" style="font-weight: bold;">Select Time Period:</label><br>
+            <select name="timeSelect" id="timeSelect" style="margin-top: 5px;">
+                <option value="">7days</option>
+                <option value="">14days</option>
+                <option value="">30days</option>
+                <option value="">45days</option>
+                <option value="">60days</option>
+                <option value="">90days</option>
+                <option value="">100days</option>
+            </select>
+            <!--<input type="number" name="timeSelect" id="timeSelect" style="margin-top: 5px;">--->
+        </div>
+        <div style="flex: 1; margin-top: 17px; padding-right: 5px;">
+            <input type="submit" value="View" id="viewButton">
+        </div>
+        <div style="flex: 1; margin-top: 17px; padding-right: 5px;">
+            <input type="submit" value="Stock" id="stockButton">
+        </div>
+    </div>
+    <hr>
+
+    <div style="overflow-x: auto;">
+        <table id="check-short-table">
+            <thead>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <form action="" enctype="multipart/form-data" id="import-stock-file-Form">
+                {% csrf_token %}
+                <span class="close">&times;</span>
+                <h4>Import Stock File</h4><br>
+                <input type="file" name="file" id="importfile"><br><br>
+                <input type="submit" value="Import" id="import-stock-file" >
+            </form>
+        </div>
+    
+    </div>
+    
+    <script>
+        let myobj = {}
+        document.addEventListener('DOMContentLoaded', function() {
+                fetchCustomerNames();
+            });
+            function fetchCustomerNames(){
+                fetch('/get_all_customer_names/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    let customerNames = Object.keys(data);
+                    myobj = data;
+                    
+                    populateCustomerNames(customerNames);
+                })
+                .catch(error => {
+                    console.error('Error fetching customerNames: ', error);
+                });
+            }
+            function populateCustomerNames(custNames){
+                var customerSelect = document.getElementById('customerSelect');
+
+                // Clear existing options
+                customerSelect.innerHTML = '';
+
+                for (var key in custNames) {
+                    if (custNames.hasOwnProperty(key)) {
+                        var option = document.createElement('option');
+                        option.value = custNames[key]; 
+                        option.textContent = custNames[key]; 
+                        customerSelect.appendChild(option);
+                    }
+                }
+            }
+            function populatetemplateNamesWithCustName(tempNames){
+                let templateName1 = document.getElementById('templateName1');
+                templateName1.innerText = tempNames[0]
+            }
+
+        $(document).ready(function() {
+            $('#home-tab').click(function(e) {
+                e.preventDefault();
+                window.location.href = '/main';
+            });
+
+            $('#import-order-tab').click(function(e) {
+                e.preventDefault();
+                window.location.href = '/importOrder_form';
+            });
+
+            $('#templates-tab').click(function(e) {
+                e.preventDefault();
+                window.location.href = '/templates'; 
+            });
+            $('#master-customer-data-tab').click(function(e) {
+                e.preventDefault();
+                window.location.href = '/master_customer_data'; 
+            });
+
+            let check_short_table = document.getElementById('check-short-table');
+
+            
+            dateArr = []
+
+            function generateTableHeaders(customerName,numOfDays) {
+                console.log("ptk is ",myobj[customerName])
+                templatesofCus = myobj[customerName];
+                let tableHead = check_short_table.getElementsByTagName('thead')[0];
+                tableHead.innerHTML = ''; // Clear existing headers
+
+
+                // Create a th element for the selected customer
+                let customerTh = document.createElement('th');
+                customerTh.style.backgroundColor = "#990000";
+                customerTh.style.color = "white";
+                customerTh.style.textAlign = "center";
+                customerTh.textContent = document.getElementById('customerSelect').value;
+                customerTh.setAttribute('colspan', '2'); 
+                customerTh.classList.add("customer-th");
+                
+
+                tableHead.appendChild(customerTh);
+                
+                for(let key in templatesofCus){
+                    
+                }
+
+                
+                let tableBody = check_short_table.getElementsByTagName('tbody')[0];
+                tableBody.innerHTML = ''; // Clear existing headers
+
+                // Create sub-columns (Order and Qty) for the date column
+                let orderQtyheaderRow = document.createElement('tr');
+                let orderQtyheaderRowFirstCol = document.createElement('th');
+                orderQtyheaderRowFirstCol.style.backgroundColor = "#FFEE63";
+                orderQtyheaderRowFirstCol.innerText = "Part Numbers";
+                orderQtyheaderRowFirstCol.style.color = "center";
+                orderQtyheaderRowFirstCol.style.textAlign = "center";
+                orderQtyheaderRowFirstCol.id = "templateName1";
+                orderQtyheaderRowFirstCol.classList.add("customer-th");
+                
+                //orderQtyheaderRowFirstCol.style.paddingRight = "7px";
+                orderQtyheaderRow.appendChild(orderQtyheaderRowFirstCol);
+
+                let thStock = document.createElement('th');
+                thStock.textContent = 'Stock';
+                thStock.style.textAlign = "center";
+                thStock.style.paddingLeft = "7px";
+                thStock.style.paddingRight = "7px";
+                thStock.style.backgroundColor = "#FF5B00";
+                thStock.style.color = "white";
+                orderQtyheaderRow.appendChild(thStock);
+
+
+                let options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+                let weekdays = { weekday: 'short'}
+
+                for (let i = 0; i < numOfDays; i++) {
+                    let nextDay = new Date();
+                    //let nextDay = new Date(2024, 3, 1);
+                    nextDay.setDate(date.getDate() + i);
+
+                    // Create a th element for the date column
+                    let thDate = document.createElement('th');
+                    thDate.style.backgroundColor = "#5356FF";
+                    thDate.style.color = "white";
+                    thDate.textContent = nextDay.toLocaleDateString('en-GB', options);
+                    thDate.textContent = "(" + nextDay.toLocaleDateString('en-GB', weekdays) + ")\n" + thDate.textContent ;
+                    thDate.style.paddingLeft = "7px";
+                    thDate.style.paddingRight = "7px";
+                    thDate.style.textAlign = "center";
+                    dateArr.push(nextDay.toLocaleDateString('en-GB', options));
+                    thDate.setAttribute('colspan', '2'); // Set colspan to 2 for two sub-columns
+                    tableHead.appendChild(thDate);
+
+                    let thOrder = document.createElement('th');
+                    thOrder.style.backgroundColor = "#67C6E3";
+                    //thOrder.style.color = "white";
+                    thOrder.textContent = 'Order';
+                    thOrder.style.paddingLeft = "7px";
+                    thOrder.style.paddingRight = "7px";
+                    thOrder.style.textAlign = "center";
+                    orderQtyheaderRow.appendChild(thOrder);
+
+                    let thQty = document.createElement('th');
+                    thQty.textContent = 'Qty';
+                    thQty.style.textAlign = "center";
+                    thQty.style.paddingLeft = "7px";
+                    thQty.style.paddingRight = "7px";
+                    thQty.style.backgroundColor = "#DFF5FF";
+                    orderQtyheaderRow.appendChild(thQty);
+                    tableBody.appendChild(orderQtyheaderRow);
+
+
+                }
+                console.log("dateArr is ", dateArr);
+            }
+
+            let date = new Date();
+            //let date = new Date(2024, 3, 1);
+            console.log("Today is ", date);
+
+            // Initial table headers for 30 days
+            generateTableHeaders("Customer Name",30);
+
+
+            function areDatesEqual(dateString1, dateString2) {
+
+                function convertToDate(dateString) {
+                    // If the date is in the format dd/mm/yy
+                    if (/^\d{2}\/\d{2}\/\d{2}$/.test(dateString)) {
+                        let parts = dateString.split('/');
+                        return new Date(`20${parts[2]}-${parts[1]}-${parts[0]}`);
+                    }
+                    // If the date is in the format yyyymmdd
+                    else if (/^\d{8}$/.test(dateString)) {
+                        return new Date(`${dateString.slice(0, 4)}-${dateString.slice(4, 6)}-${dateString.slice(6, 8)}`);
+                    }
+                    // Invalid format
+                    else {
+                        throw new Error('Invalid date format');
+                    }
+                }
+
+                // Convert both date strings to Date objects
+                let date1 = convertToDate(dateString1);
+                let date2 = convertToDate(dateString2);
+
+                // Compare the dates
+                return date1.getTime() === date2.getTime();
+            }
+
+            let stockObj = {}
+                fetch('/get_stockData_for_tdy/')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    stockObj = data;
+                    console.log("today's stock are ", stockObj);
+                })
+                .catch(error => {
+                    console.error('Error fetching customerNames: ', error);
+                });
+
+            function populateTable(data) {
+                
+                // Clear existing table body
+                let tableBody = check_short_table.getElementsByTagName('tbody')[0];
+
+
+
+                // Loop through the data and populate the table
+                data.forEach(customerOrder => {
+                    let customer = customerOrder.customer;
+                    let currentCustomerPartNo = customerOrder.custPartNo;
+                    let currentsnssPartNo = customerOrder.snssPartNo;
+                    let orders = customerOrder.orders;
+                    console.log("currentCustomerPartNo : ",currentCustomerPartNo );
+                    console.log("currentsnssPartNo : ",currentsnssPartNo );
+                    console.log("stock object here ",stockObj);
+                    console.log("stock has this part or not ", stockObj.hasOwnProperty(currentsnssPartNo));
+
+
+                    // Create a new row for each customer
+                    let customerRow = document.createElement('tr');
+                    customerRow.classList.add("select-highlight");
+                    let customerCell = document.createElement('td');
+                    //customerCell.style.backgroundColor = "#FFF5EE";
+                    customerCell.textContent = customer;
+                    customerCell.style.paddingLeft = "7px";
+                    customerCell.style.paddingRight = "7px";
+                    customerCell.classList.add("customer-th");
+                    //customerCell.setAttribute('rowspan', orders.length);
+                    customerRow.appendChild(customerCell);
+
+                    let stock = document.createElement('td');
+                    //stock.style.backgroundColor = "#ECFFDC";
+                    let stockNumber = 0;
+                    if(stockObj.hasOwnProperty(currentsnssPartNo)){
+                        stockNumber = stockObj[currentsnssPartNo];
+                    }
+                    else{
+                        stockNumber = 0;
+                    }
+                    stock.textContent = new Intl.NumberFormat().format(stockNumber);
+                    stock.style.textAlign = "center";
+                    customerRow.appendChild(stock);
+
+                    // Loop through dateArr to check if each deliveryDate exists
+                    dateArr.forEach(dateString => {
+                        let foundOrder = orders.find(order => areDatesEqual(order.deliveryDate, dateString));
+                        let newOrderCell = document.createElement('td');
+
+                        newOrderCell.style.textAlign = "center";
+                        let newQtyCell = document.createElement('td');
+                        newQtyCell.style.color = 'red';
+                        newQtyCell.style.textAlign = "center";
+                        if (foundOrder) {
+                            newOrderCell.textContent =  new Intl.NumberFormat().format(foundOrder.orderQty);
+                            newQtyCell.textContent = new Intl.NumberFormat().format (stockNumber - foundOrder.orderQty); 
+                            stockNumber = stockNumber - foundOrder.orderQty;
+                            
+                        } else {
+                            newOrderCell.textContent = 0;
+                            newQtyCell.textContent = new Intl.NumberFormat().format (stockNumber);
+                            //console.log("stockNumber is ", stockNumber);
+                            //console.log("newQtyCell is ", newQtyCell.textContent);
+                        }
+                        customerRow.appendChild(newOrderCell);
+                        customerRow.appendChild(newQtyCell);
+                    });
+
+                    tableBody.appendChild(customerRow);
+                });
+            }
+
+
+            function adjustCustomerAndTime(customer, timePeriod){
+                console.log("customer: ",customer);
+                if (timePeriod === '7days') {
+                    dateArr = [];
+                    generateTableHeaders(customer,7);
+                    
+                } else if (timePeriod === '14days') {
+                    dateArr = [];
+                    generateTableHeaders(customer,14);
+                  
+                } else if (timePeriod === '45days') {
+                    dateArr = [];
+                    generateTableHeaders(customer,45);
+
+                } else if (timePeriod === '60days') {
+                    dateArr = [];
+                    generateTableHeaders(customer,60);
+
+                } else if (timePeriod === '90days') {
+                    dateArr = [];
+                    generateTableHeaders(customer,90);
+                 
+                } else if (timePeriod === '100days') {
+                    dateArr = [];
+                    generateTableHeaders(customer,100);
+                    
+                } else {
+                    dateArr = [];
+                    generateTableHeaders(customer,30); // Default to 30 days
+                }
+                //const csrftoken = getCookie('csrftoken');
+                let customerName = document.getElementById('customerSelect').value;
+                console.log("myobj is: ", myobj);
+                console.log("templates are: ", myobj[customerName]);
+                //let tempnames = myobj[customerName];
+                //populateTemplateGroup(tempnames);
+
+                fetch(`/get_customerOrder_frame/${customerName}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("data response is " , data);
+                    populateTable(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching templates: ', error);
+                });
+
+
+            }
+
+            function populateTemplateGroup(tempnames){
+                for(var key in tempnames){
+                    console.log(key,tempnames[key]);
+                }
+
+                document.getElementById('templateName1').innerText = tempnames[0];
+            }
+
+            // View button click event handler
+                $('#viewButton').click(function() {
+                    let selectedCustomer = $('#customerSelect option:selected').text();
+                    let selectedTimePeriod = $('#timeSelect option:selected').text();
+                    console.log("Selected Customer:", selectedCustomer);
+                    console.log("Selected Time Period:", selectedTimePeriod);
+                    adjustCustomerAndTime(selectedCustomer, selectedTimePeriod);
+
+                    // Do something with the selected values (e.g., display them)
+                    //alert("Selected Customer: " + selectedCustomer + "\nSelected Time Period: " + selectedTimePeriod);
+                });
+
+        });
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("stockButton");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+        modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+        modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        }
+
+        document.querySelector('#import-stock-file-Form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            console.log("Form submission started");
+
+            var fileInput = document.getElementById('importfile');
+            var file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select a file to import.");
+                return;
+            }
+            console.log("Selected file:", file);
+
+            var csrftoken = getCookie('csrftoken');
+
+            var formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/stock_file_upload/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken
+                },
+                body: formData
+            })
+            .then(response => {
+                console.log("Response received:", response);
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    alert("Incorrect file!");
+                    throw new Error('Failed to upload file');
+                }
+            })
+            .then(response => {
+                console.log("Response data:", response);
+                const dataKeys = Object.keys(response.data);
+
+                // Determine the maximum number of rows in the data
+                let numRowsToIterate = 0;
+                for (let key of dataKeys) {
+                    numRowsToIterate = Math.max(numRowsToIterate, Object.keys(response.data[key]).length);
+                }
+
+                console.log("Number of rows to iterate:", numRowsToIterate);
+
+                // Extract the keys dynamically
+                const snssPartNumberKey = dataKeys[0];
+                const stockQtyKey = dataKeys[1];
+                const lineInfoKey = dataKeys[2];
+
+                // Iterate through each row (limited to numRowsToIterate)
+                for (let i = 0; i < numRowsToIterate; i++) {
+                    // Check if data exists for the current row index
+                    if (response.data[snssPartNumberKey].hasOwnProperty(i) && 
+                        response.data[stockQtyKey].hasOwnProperty(i) && 
+                        response.data[lineInfoKey].hasOwnProperty(i)) {
+
+                        // Construct the requestData object
+                        const requestData = {
+                            'snssPartNumber': response.data[snssPartNumberKey][i],
+                            'stockQty': response.data[stockQtyKey][i],
+                            'lineInfo': response.data[lineInfoKey][i]
+                        };
+
+                        const csrftoken = getCookie('csrftoken');
+
+                        // Send data to Django view
+                        fetch('/save_stock_data/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrftoken
+                            },
+                            body: JSON.stringify(requestData)
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                //window.location.href = '/master_customer_data';
+                            } else {
+                                console.error('Failed to save data');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                    }
+                }
+
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+
+    </script>
+
+</body>
+</html>
+
+
+

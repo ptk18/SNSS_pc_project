@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin: 0px;
+        }
+        .master-data-form-container{
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .master-data-form-container h3 {
+            text-align: center;
+        }
+        .master-data-form-container input[type="text"],
+        .master-data-form-container input[type="number"], 
+        .master-data-form-container input[type="file"],
+        .master-data-form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .master-data-form-container input[type="submit"] {
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+        .master-data-form-container input[type="submit"]:hover {
+            border: 1px solid #95D1E7;
+            background: none;
+        }
+        .template-choice-container{
+            padding-top: 5px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+            height: 80px;
+            background-color: #95D1E7;
+           
+        }
+        .template-type-container{
+            padding-top: 10px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+            height: 45px;
+            background-color: #ffc2d296;
+            border-radius: 2px;
+            
+        }
+        .template-type-container-special{
+            padding-top: 10px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+            height: 45px;
+            background-color: #95d1e771;
+            border-radius: 2px;
+            
+        }
+        .radio-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .radio-group label {
+            margin-right: 20px;
+        }
+        .radio-group input[type="submit"] {
+            width: 80px;
+            height: 30px;
+            background-color: #95D1E7;
+            color: black;
+            font-weight: bold;
+            margin: 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }    
+        .numColumns-ok-btn, .numDays-ok-btn{
+            width: 80px;
+            height: 35px;
+            background-color: #95D1E7;
+            color: black;
+            font-weight: bold;
+            margin: 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .numColumns-ok-btn:hover, .numDays-ok-btn:hover{
+            border: 1px solid #95D1E7;
+            background: none;
+        }
+        .column {
+            background-color: #95d1e757;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .each_column {
+            display: flex;
+        }
+        .column_name{
+            flex: 8;
+        }
+        .column_no{
+            flex: 4;
+        }
+        .importActivity-ok-btn{
+            width: 60px;
+            height: 30px;
+            color: black;
+            font-weight: bold;
+            margin: 0;
+            border: 1px solid #95D1E7;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-bottom: 5px;
+        }
+        .importActivity-ok-btn:hover{
+            background-color: #95D1E7;
+            border: none;
+        }
+        #weekly_operation_div, #weekly_operation_div-edit{
+            background-color: #95d1e757;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .day{
+            background-color: #95d1e757;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .each_day{
+            display: flex;
+        }
+        .date_name{
+            flex: 6;
+        }
+        .orderInEachDay{
+            flex: 6;
+        }
+        table{
+            width: 100%;
+            
+        }
+        th,td {
+            height: 30px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        
+        .form-control{
+            padding-left: 3px;
+        }
+        .edit-btn{
+            margin: 2px;
+            width: 50px;
+            background-color: #49CA3E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            height: 25px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+        .delete-btn {
+            margin: 2px;
+            width: 50px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            height: 25px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+        #template-table-N-container{
+            overflow-x: auto; /* Enable horizontal scrolling */
+            max-width: 100%; /* Ensure the container fills its parent */
+        }
+        .input-group{
+            display: flex;
+        }
+        .back{
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="template-choice-container" id="template-choice-container" >
+        <div style="display:flex;">
+            <div style="flex: 1; margin-left: auto; text-align: left;">
+                <a href="http://snss-djwa.asia.ad.nsk.com:81/main/" class="back">&#10094; Back</a>
+            </div>
+            <div style="flex: 11;">
+                <h2 style="margin-top: 0;">Choose Template Category</h2>
+            </div>
+        </div>
+        <form action="#" class="radio-group" id="templateForm">
+        <div>
+            <input type="radio" id="normal" name="template" value="normal" onclick="getChecked(1)" checked="checked">
+            <label for="normal">Normal Template</label>
+        </div>
+        <div>
+            <input type="radio" id="special" name="template" value="special" onclick="getChecked(2)">
+            <label for="special">Special Template</label>
+        </div>
+        <!--input type="submit" value="Ok" class="" id="submit-template">-->
+        </form>
+    </div>
+
+    <div class="data-container" style="display: flex; padding-left: 5px;">
+        <div style=" display: none; flex: 9; overflow: auto;" id="normal-template-table">
+            <h3>Normal Template</h3>
+            <div id="template-table-N-container" style="overflow: auto;">
+                <table id = "template-table-N" style="width: min-content; white-space: nowrap;">
+
+                </table>
+            </div>
+        </div>
+        <div class="master-data-form-container" style="display: none; flex: 3; margin: 10px; margin-top: 10px;" id="normal-template">
+            <div class="template-type-container" >
+                <h3 style="margin-top: 5px;">Create a template</h3>
+            </div>
+            <hr style="opacity: 0.5;">
+            <div id="FAtogether" >
+
+                <form id="master-data-form"  >
+                    {% csrf_token %}
+                    <label for="template_name">Enter template name: </label><br>
+                    <input type="text" id="template_name" name="template_name" required><br><br>
+
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Template Type</label><br>
+                    <div style="z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; padding: 5px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="actual-FA" name="templateType" value="Actual/FA">
+                            <label for="actual-FA">Actual/FA</label><br>
+                        </div>
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="forecast-only" name="templateType" value="Forecast-Only">
+                            <label for="forecast-only">Forecast Only</label><br>
+                        </div>       
+                    </div>
+                    <br>
+        
+                    <label for="row_started">Enter row started:</label><br>
+                    <input type="number" id="row_started" name="row_started" required><br>
+                    <hr style="opacity: 0.5;">
+                    
+                    <label for="customerCode">Enter col number for customer code:</label><br>
+                    <input type="number" id="customerCode" name="customerCode" required><br><br>
+
+                    <label for="customerPartNo">Enter col number for customer part number:</label><br>
+                    <input type="number" id="customerPartNo" name="customerPartNo" required><br><br>
+
+                    <label for="orderQty">Enter col numbers for Order Qty:</label><br>
+                    <div style="display: flex;" id="orderQty">
+                        <input type="number" id="orderQtyStart" name="orderQtyStart" placeholder="Start Date Col" required>
+                        <input type="number" id="orderQtyEnd" name="orderQtyEnd" placeholder="End Date Col" required>
+                    </div><br>
+
+                    <label for="deliveryDate">Enter col numbers for Delivery Date:</label><br>
+                    <div style="display: flex;" id="deliveryDate">
+                        <input type="number" id="deliveryDateStart" name="deliveryDateStart" placeholder="Start Date Col" required>
+                        <input type="number" id="deliveryDateEnd" name="deliveryDateEnd" placeholder="End Date Col" required>
+                    </div><br>
+                    
+                    <label for="deliveryTime">Enter col number for Delivery Time:</label><br>
+                    <input type="number" id="deliveryTime" name="deliveryTime" required><br><br>
+
+                    <label for="deliveryPlant">Enter col number for Delivery Plant:</label><br>
+                    <input type="number" id="deliveryPlant" name="deliveryPlant" required><br>
+            
+                    <hr style="opacity: 0.5;">
+                    
+                    <label for="file_type">File Type:</label><br>
+                    <select id="file_type" name="file_type" required>
+                        <option value="csv">.csv</option>
+                        <option value="txt">.txt</option>
+                        <option value="csv">.xls</option>
+                        <option value="txt">.xlsx</option>
+                    </select><br><br>
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Conditions</label><br>
+                        <div style="z-index: 0; border: 2px solid pink; border-radius: 5px; padding: 5px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                            <div style="display: flex; margin: 10px 3px;">
+                                <input type="checkbox" id="check1" name="conditions" value="Need + Date">
+                                <label for="check1">Need + date</label><br>
+                            </div>
+                            <div style="display: flex; margin: 10px 3px;">
+                                <input type="checkbox" id="check2" name="conditions" value="Summarize orders (Deli Date+Cus Part No)">
+                                <label for="check2">Summarize orders (Deli Date,Customer Part No)</label><br>
+                            </div>       
+                        </div>
+        
+                    <div id="weekly_operation_div" style="display: none; padding: 10px;">
+                            <label for="amountdaysplus">Amount of Days + </label>
+                            <input type="number" name="amountdaysplus" id="amountdaysplus" value="0">
+        
+                            <label for="columnNumberplus">Column Number + </label>
+                            <input type="number" id="columnNumberplus" name="columnNumberplus" value="0">
+                    </div><br>
+
+                    <div>
+                        <input type="radio" id="need-back-up-data" name="need-back-up-data" value="need-back-up-data" onclick="getChecked(1)" >
+                        <label for="need-back-up-data">Needs back up data</label>
+                    </div><br>
+
+                    <input type="submit" value="Submit" id="submit-btn-normal-template">
+                </form>
+                <form id="master-data-form-edit" style="display: none;">
+                    {% csrf_token %}
+                    <label for="template_name-edit">Enter template name: </label><br>
+                    <input type="text" id="template_name-edit" name="template_name-edit" required><br><br>
+
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Template Type</label><br>
+                    <div style="z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; padding: 5px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="actual-FA-edit" name="templateType" value="Actual/FA">
+                            <label for="actual-FA">Actual/FA</label><br>
+                        </div>
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="forecast-only-edit" name="templateType" value="Forecast-Only">
+                            <label for="forecast-only">Forecast Only</label><br>
+                        </div>       
+                    </div>
+                    <br>
+        
+                    <label for="row_started-edit">Enter row started:</label><br>
+                    <input type="number" id="row_started-edit" name="row_started-edit" required><br>
+                    <hr style="opacity: 0.5;">
+                    
+                    <label for="customerCode-edit">Enter col number for customer code:</label><br>
+                    <input type="number" id="customerCode-edit" name="customerCode-edit" required><br><br>
+
+                    <label for="customerPartNo-edit">Enter col number for customer part number:</label><br>
+                    <input type="number" id="customerPartNo-edit" name="customerPartNo-edit" required><br><br>
+
+                    <label for="orderQty-edit">Enter col numbers for Order Qty:</label><br>
+                    <div style="display: flex;" id="orderQty-edit">
+                        <input type="number" id="orderQtyStart-edit" name="orderQtyStart" placeholder="Start Date Col" required>
+                        <input type="number" id="orderQtyEnd-edit" name="orderQtyEnd" placeholder="End Date Col" required>
+                    </div><br>
+
+                    <label for="deliveryDate-edit">Enter col numbers for Delivery Date:</label><br>
+                    <div style="display: flex;" id="deliveryDate-edit">
+                        <input type="number" id="deliveryDateStart-edit" name="deliveryDateStart" placeholder="Start Date Col" required>
+                        <input type="number" id="deliveryDateEnd-edit" name="deliveryDateEnd" placeholder="End Date Col" required>
+                    </div><br>
+                    
+                    <label for="deliveryTime-edit">Enter col number for Delivery Time:</label><br>
+                    <input type="number" id="deliveryTime-edit" name="deliveryTime-edit" required><br><br>
+
+                    <label for="deliveryPlant-edit">Enter col number for Delivery Plant:</label><br>
+                    <input type="number" id="deliveryPlant-edit" name="deliveryPlant-edit" required><br>
+            
+                    <hr style="opacity: 0.5;">
+                    
+                    <label for="deliveryPlant-edit">File Type:</label><br>
+                    <select id="file_type-edit" name="deliveryPlant-edit" required>
+                        <option value="csv">.csv</option>
+                        <option value="txt">.txt</option>
+                        <option value="csv">.xls</option>
+                        <option value="txt">.xlsx</option>
+                    </select><br><br>
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Conditions</label><br>
+                        <div style="z-index: 0; border: 2px solid pink; border-radius: 5px; padding: 5px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                            <div style="display: flex; margin: 10px 3px;">
+                                <input type="checkbox" id="check1-edit" name="conditions" value="Need + Date">
+                                <label for="check1">Need + date</label><br>
+                            </div>
+                            <div style="display: flex; margin: 10px 3px;">
+                                <input type="checkbox" id="check2-edit" name="conditions" value="Summarize orders (Deli Date+Cus Part No)">
+                                <label for="check2">Summarize orders (Deli Date,Customer Part No)</label><br>
+                            </div>       
+                        </div>
+                    <div id="weekly_operation_div-edit" style="display: none; padding: 10px;">
+                            <label for="amountdaysplus-edit">Amount of Days + </label>
+                            <input type="number" name="amountdaysplus-edit" id="amountdaysplus-edit" value="0">
+        
+                            <label for="columnNumberplus-edit">Column Number + </label>
+                            <input type="number" id="columnNumberplus-edit" name="columnNumberplus-edit" value="0">
+                    </div><br>
+                    <div>
+                        <input type="radio" id="need-back-up-data-edit" name="need-back-up-data-edit" value="need-back-up-data-edit" onclick="getChecked(1)" >
+                        <label for="need-back-up-data-edit">Needs back up data</label>
+                    </div><br>
+                    <input type="submit" value="Update" id="submit-btn-normal-template-edit">
+                </form>
+            </div>
+            
+        </div>
+    
+    </div>
+    
+    
+    <div class="data-container" style="display: flex; padding-left: 5px;">
+        <div style=" display: none; flex: 9; overflow: auto;" id="special-template-table">
+            <h3>Special Template</h3>
+            <div id="template-table-S-container" style="overflow: auto;">
+                <table id = "template-table-S" style="width: min-content; white-space: nowrap;">
+
+                </table>
+            </div>
+        </div>
+        <div class="master-data-form-container" style="display: none; flex: 3; margin: 10px; margin-top: 10px;" id="special-template">
+            <div class="template-type-container-special" >
+                <h3 style="margin-top: 5px;">Create a template</h3>
+            </div>
+            <hr style="opacity: 0.5;">
+            <div id="FAtogether" >
+
+                <form id="master-data-form-special" >
+                    {% csrf_token %}
+                    <label for="template_name-special">Enter template name: </label><br>
+                    <input type="text" id="template_name-special" name="template_name-special" required><br><br>
+
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Template Type</label><br>
+                    <div style="z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; padding: 5px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="actual-FA-special" name="templateType-special" value="Actual/FA">
+                            <label for="actual-FA-special">Actual/FA</label><br>
+                        </div>
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="forecast-only-special" name="templateType-special" value="Forecast-Only">
+                            <label for="forecast-only-special">Forecast Only</label><br>
+                        </div>       
+                    </div>
+                    <br>
+        
+                    <label for="row_started-special">Enter row started:</label><br>
+                    <input type="number" id="row_started-special" name="row_started-special" required><br>
+                    <hr style="opacity: 0.5;">
+                    
+                    <label for="customerCode-special">Enter col number for customer code:</label><br>
+                    <input type="number" id="customerCode-special" name="customerCode-special" required><br><br>
+
+                    <label for="customerPartNo-special">Enter col number for customer part number:</label><br>
+                    <input type="number" id="customerPartNo-special" name="customerPartNo-special" required><br><br>
+
+                    <!-- Section for editing existing entries -->
+                    <div id="special-monthly-date-order-condition" >
+                        <label for="noOfweeks">Enter number of weeks:</label>
+                        <div style="display: flex;">
+                            <input type="number" id="noOfweeks" name="noOfweeks" min="1" max="4" style="flex: 10;">
+                            <input type="button" id="noOfweeksbtn" value="OK" style="flex: 2; margin-left: 5px;  margin-top:10px ; height: 35px; background-color: #95D1E7; color: black; border: none; border-radius: 3px;">
+                        </div>
+                        <div style="display: flex; flex-direction: column;" id="orderQtyDiv">
+                            <!-- Dynamic input fields will be added here -->
+                        </div>
+                    </div>
+                    
+                    <div id="special-daily-date-order-condition" style="background-color: #95D1E7; display: none;">
+                        <br>
+                        <br>
+                    </div><br>
+                    
+                    <label for="deliveryTime-special">Enter col number for Delivery Time:</label><br>
+                    <input type="number" id="deliveryTime-special" name="deliveryTime-special" required><br><br>
+
+                    <label for="deliveryPlant-special">Enter col number for Delivery Plant:</label><br>
+                    <input type="number" id="deliveryPlant-special" name="deliveryPlant-special" required><br>
+                    
+                    <label for="file_type-special">File Type:</label><br>
+                    <select id="file_type-special" name="file_type-special" required>
+                        <option value="csv">.csv</option>
+                        <option value="txt">.txt</option>
+                        <option value="csv">.xls</option>
+                        <option value="txt">.xlsx</option>
+                    </select><br><br>
+                    
+
+                    <input type="submit" value="Submit" id="submit-btn-special-template">
+                </form>
+                <form id="master-data-form-special-edit" style="display: none;">
+                    {% csrf_token %}
+                    <label for="special-template_name-edit">Enter template name: </label><br>
+                    <input type="text" id="special-template_name-edit" name="special-template_name-edit" required><br><br>
+
+                    <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;">Template Type</label><br>
+                    <div style="z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; padding: 5px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="actual-FA-special-edit" name="templateType-special-edit" value="Actual/FA">
+                            <label for="actual-FA-special-edit">Actual/FA</label><br>
+                        </div>
+                        <div style="display: flex; margin: 10px 3px;">
+                            <input type="radio" id="forecast-only-special-edit" name="templateType-special-edit" value="Forecast-Only">
+                            <label for="forecast-only-special-edit">Forecast Only</label><br>
+                        </div>       
+                    </div>
+                    <br>
+        
+                    <label for="row_started-special-edit">Enter row started:</label><br>
+                    <input type="number" id="row_started-special-edit" name="row_started-special-edit" required><br>
+                    <hr style="opacity: 0.5;">
+                    
+                    <label for="customerCode-special-edit">Enter col number for customer code:</label><br>
+                    <input type="number" id="customerCode-special-edit" name="customerCode-special-edit" required><br><br>
+
+                    <label for="customerPartNo-special-edit">Enter col number for customer part number:</label><br>
+                    <input type="number" id="customerPartNo-special-edit" name="customerPartNo-special-edit" required><br><br>
+
+                    <!-- Section for editing existing entries -->
+                    <div id="special-monthly-date-order-condition-edit" >
+                        <label for="noOfweeks-edit">Enter number of weeks:</label>
+                        <div style="display: flex;">
+                            <input type="number" id="noOfweeks-edit" name="noOfweeks-edit" min="1" style="flex: 10;">
+                            <input type="button" id="noOfweeksbtn-edit" value="OK" style="flex: 2; margin-left: 5px;  margin-top:10px ; height: 35px; background-color: #95D1E7; color: black; border: none; border-radius: 3px;">
+                        </div>
+                        <div style="display: flex; flex-direction: column;" id="orderQtyDiv-edit">
+                            <!-- Dynamic input fields will be added here -->
+                        </div>
+                    </div>
+                
+
+                    <div id="special-daily-date-order-condition-edit" style="background-color: #95D1E7; display: none;">
+                        <br>
+                        <br>
+                    </div><br>
+                    
+                    <label for="deliveryTime-special-edit">Enter col number for Delivery Time:</label><br>
+                    <input type="number" id="deliveryTime-special-edit" name="deliveryTime-special-edit" required><br><br>
+
+                    <label for="deliveryPlant-special-edit">Enter col number for Delivery Plant:</label><br>
+                    <input type="number" id="deliveryPlant-special-edit" name="deliveryPlant-special-edit" required><br>
+                    
+                    <label for="file_type-special-edit">File Type:</label><br>
+                    <select id="file_type-special-edit" name="file_type-special-edit" required>
+                        <option value="csv">.csv</option>
+                        <option value="txt">.txt</option>
+                        <option value="csv">.xls</option>
+                        <option value="txt">.xlsx</option>
+                    </select><br><br>
+                    
+
+                    <input type="submit" value="Submit" id="submit-btn-special-template-edit">
+                </form>
+            </div>
+            
+        </div>
+    </div>
+    
+
+    <script>
+        function onlyOne(checkbox) {
+            var checkboxes = document.getElementsByName('check')
+            checkboxes.forEach((item) => {
+                if (item !== checkbox) item.checked = false
+            })
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTemplates();
+        });
+
+        function fetchTemplates() {
+            fetch('/get_normal_tems/')
+            .then(response => response.json())
+            .then(data => {
+                populateNormalTemplateTable(data);
+            })
+            .catch(error => {
+                console.error('Error fetching templates: ', error);
+            });
+        }
+        
+
+        function populateNormalTemplateTable(data){
+            //var table = document.getElementById('template-table-N');
+            //var tbody = document.createElement('tbody');
+
+            const tableContainer = document.getElementById('template-table-N');
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            
+
+            // Create table header
+        const headers = ['TemplateID', 'TemplateName', 'StartRow', 'FileType','ColumnNames', 'ColumnNumbers', 'AmountDays +', 'ColumnNumber +','Edit/Delete'];
+        const headerRow = document.createElement('tr');
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+            headerRow.style.backgroundColor = "#ffc2d296";
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Grouping data by templateID and templateName
+        const groupedData = {};
+        data.forEach(item => {
+            const key = item.templateID + '_' + item.templateName;
+            if (!groupedData[key]) {
+                groupedData[key] = [];
+            }
+            groupedData[key].push(item);
+        });
+
+        console.log("groupdedData: ",groupedData);
+
+        // Create table body
+        for (const key in groupedData) {
+            const rows = groupedData[key];
+            const rowSpan = rows.length;
+            rows.forEach((row, index) => {
+                const tr = document.createElement('tr');
+
+                if (index === 0) {
+                    const idCell = document.createElement('td');
+                    idCell.rowSpan = rowSpan;
+                    idCell.textContent = row.templateID;
+                    tr.appendChild(idCell);
+
+                    const nameCell = document.createElement('td');
+                    nameCell.rowSpan = rowSpan;
+                    nameCell.textContent = row.templateName;
+                    tr.appendChild(nameCell);
+
+                    const startRow = document.createElement('td');
+                    startRow.rowSpan = rowSpan;
+                    startRow.textContent = row.startRow;
+                    tr.appendChild(startRow);
+
+                    const fileType = document.createElement('td');
+                    fileType.rowSpan = rowSpan;
+                    fileType.textContent = row.fileType;
+                    tr.appendChild(fileType);         
+                }
+
+
+                Object.values(row).slice(6, -3).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+
+                if (index === 0) {
+                    const amountdaysplusCell = document.createElement('td');
+                    amountdaysplusCell.rowSpan = rowSpan;
+                    amountdaysplusCell.textContent = row.amountdaysplus;
+                    tr.appendChild(amountdaysplusCell);
+
+                    const columnNumberplusCell = document.createElement('td');
+                    columnNumberplusCell.rowSpan = rowSpan;
+                    columnNumberplusCell.textContent = row.columnNumberplus;
+                    tr.appendChild(columnNumberplusCell); 
+
+                    const editDeleteCell = document.createElement('td');
+					editDeleteCell.rowSpan = rowSpan;
+                    const div = document.createElement('div');
+                    div.style.display = "flex";
+                    div.style.padding = 5 + "px";
+
+                    const editBtn = document.createElement('button');
+                    
+                    editBtn.textContent = 'Edit';
+                    editBtn.className = 'edit-btn';
+                    editBtn.addEventListener('click', () => {
+                        document.getElementById('master-data-form').style.display = "none";
+                        document.getElementById('master-data-form-edit').style.display = "block";
+                        
+                        console.log("groupedData here = ",groupedData[row.templateID + '_' + row.templateName])
+                        const rowData = groupedData[row.templateID + '_' + row.templateName];
+                        console.log("rowData[0].columnNumber: ",rowData[0].columnNumber)
+                        // Get input values
+                        document.getElementById("template_name-edit").value = row.templateName;
+                        document.getElementById("row_started-edit").value = row.startRow ? parseInt(row.startRow) : '0';
+
+                        document.getElementById("customerCode-edit").value = parseInt(rowData[0].columnNumber); 
+                        document.getElementById("customerPartNo-edit").value = parseInt(rowData[1].columnNumber);
+
+                        var orderQtyCols = (rowData[2].columnNumber).split(',');
+                        document.getElementById("orderQtyStart-edit").value = parseInt(orderQtyCols[0]);
+                        document.getElementById("orderQtyEnd-edit").value = parseInt(orderQtyCols[1]);
+                        
+                        var deliveryDateCols = (rowData[3].columnNumber).split(',');
+                        document.getElementById("deliveryDateStart-edit").value = parseInt(deliveryDateCols[0]);
+                        document.getElementById("deliveryDateEnd-edit").value = parseInt(deliveryDateCols[1]);
+                        
+                        document.getElementById("deliveryTime-edit").value = parseInt(rowData[4].columnNumber);
+                        document.getElementById("deliveryPlant-edit").value = parseInt(rowData[5].columnNumber);
+                        document.getElementById("file_type-edit").value = row.fileType;
+                        console.log("row.condition:",row.condition);
+
+                        var condition = row.condition; 
+                        var check1Val = document.getElementById("check1-edit").value;
+                        console.log("check1Val" , check1Val);
+                        var check2Val = document.getElementById("check2-edit").value;
+                        console.log("check2Val" , check2Val);
+
+                        console.log("check1Val " , condition == check1Val);
+                        console.log("check2Val " , condition == check2Val);
+                        if (row.condition == check1Val){
+                            console.log("check1 is checked");
+                            document.getElementById("check1-edit").checked = true;
+                            document.getElementById('check2-edit').checked = false;
+                        }
+                        else if(row.condition == check2Val){
+                            console.log("check2 is checked");
+                            document.getElementById("check2-edit").checked = true;
+                            document.getElementById('check1-edit').checked = false;
+                        }
+                        else if(row.condition != check1Val && row.condition != check2Val){
+                            console.log("here we go")
+                            document.getElementById('check1-edit').checked = false;
+                            document.getElementById('check2-edit').checked = false;
+                           
+                        }
+
+                        var templateType = row.templateType;
+                        var acutualFA = document.getElementById("actual-FA-edit").value;
+                        var forecast = document.getElementById("forecast-only-edit").value;
+                        if (templateType == acutualFA){
+                            document.getElementById("actual-FA-edit").checked = true;
+                        }
+                        else if(templateType == forecast){
+                            document.getElementById("forecast-only-edit").checked = true;
+                        }
+
+                        if(row.needBackupData){
+                            document.getElementById("need-back-up-data-edit").checked;
+                        }
+
+                        amountdaysplusVal = rowData[0].amountdaysplus
+                        console.log(amountdaysplusVal != "0");
+
+                        var weeklyOperationDiv = document.getElementById('weekly_operation_div-edit');
+                        if(amountdaysplusVal != "0"){
+                            document.getElementById("check1-edit").checked = true;
+                            weeklyOperationDiv.style.display = 'block';
+                            document.getElementById('amountdaysplus-edit').value = rowData[0].amountdaysplus;
+                            document.getElementById('columnNumberplus-edit').value = rowData[0].columnNumberplus;
+                        }
+                        else if(amountdaysplusVal == "0"){
+                            //document.getElementById("check2").checked = true;
+                        }
+                        
+
+                        document.getElementById("amountdaysplus-edit").innerText = row.amountdaysplus; 
+                        document.getElementById("columnNumberplus-edit").innerText = row.columnNumberplus; 
+
+                        console.log('Edit clicked for templateID:', row.templateID);
+                        document.querySelector('#master-data-form-edit').addEventListener('submit', function(event) {
+                            event.preventDefault(); // Prevent default form submission
+                            var templateID = row.templateID;
+                            // Get input values
+                            var templateName = document.getElementById("template_name-edit").value;
+                            var rowStarted = document.getElementById("row_started-edit").value;
+                            var customerCodeCol = document.getElementById("customerCode-edit").value;
+                            var customerPartNoCol = document.getElementById("customerPartNo-edit").value;
+
+                            console.log("rowStarted ",rowStarted);
+                            console.log("customerCodeCol ",customerCodeCol);
+                            console.log("customerPartNoCol ",customerPartNoCol);
+
+                            var orderQtyStart = document.getElementById("orderQtyStart-edit").value;
+                            var orderQtyEnd = document.getElementById("orderQtyEnd-edit").value;
+                            var orderQtyCols = orderQtyStart + "," + orderQtyEnd;
+                            console.log("orderQtyStart ",orderQtyStart);
+                            console.log("orderQtyEnd ",orderQtyEnd);
+
+                            var deliveryDateStart = document.getElementById("deliveryDateStart-edit").value;
+                            var deliveryDateEnd = document.getElementById("deliveryDateEnd-edit").value;
+                            var deliveryDateCols = deliveryDateStart + "," + deliveryDateEnd;
+                            console.log("deliveryDateStart ",deliveryDateStart);
+                            console.log("deliveryDateEnd ",deliveryDateEnd);
+
+                            var deliveryTimeCol = document.getElementById("deliveryTime-edit").value;
+                            var deliveryPlantCol = document.getElementById("deliveryPlant-edit").value;
+                            var fileType = document.getElementById("file_type-edit").value;
+                            var needPlusDate = document.getElementById("check1-edit").checked;
+                            var summarizeOrders = document.getElementById("check2-edit").checked;
+
+                            console.log("deliveryTimeCol ",deliveryTimeCol);
+                            console.log("deliveryPlantCol ",deliveryPlantCol);
+
+                            var acutualFA = document.getElementById("actual-FA-edit").checked;
+                            var forecast = document.getElementById("forecast-only-edit").checked;
+                            var condition = "";
+                            var templateType = "";
+
+                            if (needPlusDate) {
+                                condition = "Need + Date";
+                            } else if (summarizeOrders) {
+                                condition = "Summarize orders (Deli Date+Cus Part No)";
+                            } if (acutualFA) {
+                                templateType = "Actual/FA";
+                            } else if (forecast){
+                                templateType = "Forecast-Only";
+                            }
+
+                            var needBackupData = document.getElementById("need-back-up-data-edit").checked;
+                            var amountdaysplus = document.getElementById("amountdaysplus-edit").value; 
+                            var columnNumberplus = document.getElementById("columnNumberplus-edit").value; 
+
+                            if(amountdaysplus==""){
+                                amountdaysplus = 0;
+                            }
+                            if(columnNumberplus==""){
+                                columnNumberplus = 0;
+                            }
+                            console.log("amountdaysplus: ",amountdaysplus);
+                            console.log("columnNumberplus: ",columnNumberplus);
+
+                            // Construct column numbers array
+                            var columnNumbers = [
+                                customerCodeCol,
+                                customerPartNoCol,
+                                orderQtyCols,
+                                deliveryDateCols,
+                                deliveryTimeCol,
+                                deliveryPlantCol
+                            ];
+
+                            // Column names array
+                            var columnNames = ['Customer Code', 'Customer Part Number', 'Order Qty', 'Delivery Date', 'Delivery Time', 'Delivery Plant'];
+                            console.log("Column Numbers:", columnNumbers);
+                            console.log("templateName: ", templateName);
+                            console.log("templateType: ", templateType);
+                            console.log("rowstarted: ",rowStarted);
+                            console.log("fileType: ",fileType);
+                            console.log("columnNames: ",columnNames);
+                            console.log("columnNumbers: ",columnNumbers);
+                            console.log("columnNumberplus: ",columnNumberplus);
+                            console.log("amountofdayplus: ",amountdaysplus);
+                            // Construct data to send to Django view
+                            const requestData = {
+                                'templateID' : templateID,
+                                'templateName': templateName,
+                                'templateType': templateType,
+                                'rowStarted': rowStarted,
+                                'columnNames': columnNames,
+                                'columnNumbers': columnNumbers,
+                                'fileType': fileType,
+                                'condition': condition,
+                                'needBackupData': needBackupData,
+                                'amountdaysplus': amountdaysplus, // Corrected
+                                'columnNumberplus': columnNumberplus // Corrected
+                            };
+
+                                const csrftoken = getCookie('csrftoken');
+
+
+
+                                // Send data to Django view
+                                fetch(`/update_template/${templateID}/`, {
+                                    method: 'POST', // Change to 'POST' or 'PUT' based on your backend implementation
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRFToken': csrftoken
+                                    },
+                                    body: JSON.stringify(requestData)
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        window.alert("Successfully Updated!");
+                                        window.location.href = '/templates';
+                                    } else {
+                                        console.error('Failed to update data');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                }); 
+                            })
+                    });
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.addEventListener('click', () => {
+                        template_id = row.templateID;
+                        console.log("template_id ", template_id)
+                        // Confirm deletion
+                        if (confirm("Are you sure you want to delete this template?")) {
+                            const csrftoken = getCookie('csrftoken');
+
+                            fetch(`/delete_template/${template_id}/`, {
+                                method: 'DELETE', 
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrftoken
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    window.alert("Successfully deleted the template!");
+                                    window.location.href = '/templates';
+                                } else {
+                                    console.error('Failed to delete data');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            }); 
+                        }
+                    });
+                    div.appendChild(editBtn);
+                    div.appendChild(deleteBtn);
+                    editDeleteCell.appendChild(div);
+                    tr.appendChild(editDeleteCell);
+                }
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+        }
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+        }
+
+        document.getElementById('normal-template').style.display = "block";
+        document.getElementById('normal-template-table').style.display = "block";
+        let btnChecked = "";
+
+        function getChecked(i) {
+            console.log("btnChecked: ", btnChecked)
+            if (btnChecked == i) {
+                document.getElementsByTagName("input")[i-1].checked = false;      
+            }
+            else {
+                btnChecked = i;
+            }
+            if (btnChecked == 1) {
+                document.getElementById('normal-template').style.display = "block";
+                document.getElementById('normal-template-table').style.display = "block";
+                document.getElementById('special-template').style.display = "none";
+                document.getElementById('template-choice-container').style.backgroundColor = "#95D1E7";
+                btnChecked == ""
+            }
+            else if (btnChecked == 2) {
+                document.getElementById('normal-template').style.display = "none";
+                document.getElementById('normal-template-table').style.display = "none";
+                document.getElementById('special-template').style.display = "block";
+                document.getElementById('special-template-table').style.display = "block";
+                document.getElementById('template-choice-container').style.backgroundColor = "#ffc2d296";
+                btnChecked == ""
+                fetchSpecialTemplates();
+
+            }         
+        }
+        
+        
+            function addColumns() {
+                var numColumns = parseInt(document.getElementById("numColumns").value);
+                var container = document.getElementById("columnsContainer");
+                container.innerHTML = ""; // Clear previous content
+                
+                var options = [
+                    { label: "Customer Code", singleInput: true },
+                    { label: "Customer Part Number", singleInput: true },
+                    { label: "Order Qty", singleInput: true },
+                    { label: "Delivery Date", startDate: true, endDate: true },
+                    { label: "Delivery Plant", singleInput: true },
+                    { label: "Delivery Time", singleInput: true }
+                ];
+
+                for (var i = 0; i < numColumns; i++) {
+                    var div = document.createElement("div");
+                    div.className = "column";
+
+                    options.forEach(function(option) {
+                        var div2 = document.createElement("div");
+                        div2.className = "each_column";
+
+                        var label = document.createElement("label");
+                        label.textContent = option.label;
+                        div2.appendChild(label);
+
+                        if (option.singleInput) {
+                            var columnNo = document.createElement("input");
+                            columnNo.type = "number";
+                            columnNo.className = "column_no";
+                            columnNo.placeholder = "Column Number";
+                            div2.appendChild(columnNo);
+                        } else {
+                            var startDateInput = document.createElement("input");
+                            startDateInput.type = "number";
+                            startDateInput.className = "start_date_no";
+                            startDateInput.placeholder = "Start Date Column Number";
+                            div2.appendChild(startDateInput);
+
+                            var endDateInput = document.createElement("input");
+                            endDateInput.type = "number";
+                            endDateInput.className = "end_date_no";
+                            endDateInput.placeholder = "End Date Column Number";
+                            div2.appendChild(endDateInput);
+                        }
+
+                        div.appendChild(div2);
+                    });
+
+                    container.appendChild(div);
+                }
+            }
+
+            function getColumnValues() {
+                var columnValues = [];
+                var columnElements = document.querySelectorAll('.each_column');
+                
+                columnElements.forEach(function(columnElement) {
+                    var label = columnElement.querySelector('label').textContent;
+                    var columnNo;
+                    var startDateNo, endDateNo;
+
+                    if (label === "Delivery Date") {
+                        startDateNo = columnElement.querySelector('.start_date_no').value;
+                        endDateNo = columnElement.querySelector('.end_date_no').value;
+                    } else {
+                        columnNo = columnElement.querySelector('.column_no').value;
+                    }
+                    
+                    var column = {};
+                    column[label] = { columnNo, startDateNo, endDateNo };
+                    
+                    columnValues.push(column);
+                });
+                
+                return columnValues;
+            }
+   
+
+
+    function addDays(){
+        var numDays = parseInt(document.getElementById("numDays").value);
+        var container = document.getElementById("daysContainer");
+        container.innerHTML = ""; // Clear previous content
+        
+        for (var i = 0; i < numDays; i++) {
+            var div = document.createElement("div");
+            div.className = "day";
+
+            var div2 = document.createElement("div");
+            div2.className = "each_day"
+            
+            var date = document.createElement("input");
+            date.type = "number";
+            date.className = "date_name";
+            date.placeholder = "Enter Date column";
+            div2.appendChild(date);
+
+            var order = document.createElement("input");
+            order.type = "number";
+            order.className = "orderInEachDay"
+            order.placeholder ="Enter Order number column"
+            div2.appendChild(order)
+            div.appendChild(div2)
+            container.appendChild(div);
+        }
+    }
+
+        function getDayValues(){
+            var dayValues = [];
+            var dayElements = document.querySelectorAll('.each_day');
+            
+            dayElements.forEach(function(dayElement) {
+                var date = dayElement.querySelector('.date_name').value;
+                var order = dayElement.querySelector('.orderInEachDay').value;
+                
+                var day = {
+                    name: date,
+                    number: order,
+                };
+                
+                dayValues.push(day);
+            });
+            
+            return dayValues;
+            //console.log("column values are: ")
+        }
+
+        document.getElementById('submit-btn-normal-template').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            console.log("form submitted");
+
+            // Get input values
+            var templateName = document.getElementById("template_name").value;
+            var rowStarted = document.getElementById("row_started").value;
+            var customerCodeCol = document.getElementById("customerCode").value;
+            var customerPartNoCol = document.getElementById("customerPartNo").value;
+
+            var orderQtyStart = document.getElementById("orderQtyStart").value;
+            var orderQtyEnd = document.getElementById("orderQtyEnd").value;
+            var orderQtyCols = orderQtyStart + "," + orderQtyEnd;
+
+            var deliveryDateStart = document.getElementById("deliveryDateStart").value;
+            var deliveryDateEnd = document.getElementById("deliveryDateEnd").value;
+            var deliveryDateCols = deliveryDateStart + "," + deliveryDateEnd;
+
+            var deliveryTimeCol = document.getElementById("deliveryTime").value;
+            var deliveryPlantCol = document.getElementById("deliveryPlant").value;
+            var fileType = document.getElementById("file_type").value;
+            var needPlusDate = document.getElementById("check1").checked;
+            var summarizeOrders = document.getElementById("check2").checked;
+
+            var acutualFA = document.getElementById("actual-FA").checked;
+            var forecast = document.getElementById("forecast-only").checked;
+            var condition = "";
+            var templateType = "";
+
+            if (needPlusDate) {
+                condition = "Need + Date";
+            } else if (summarizeOrders) {
+                condition = "Summarize orders (Deli Date+Cus Part No)";
+            } if (acutualFA) {
+                templateType = "Actual/FA";
+            } else if (forecast){
+                templateType = "Forecast-Only";
+            }
+
+            var needBackupData = document.getElementById("need-back-up-data").checked;
+            var amountdaysplus = document.getElementById("amountdaysplus").value; 
+            var columnNumberplus = document.getElementById("columnNumberplus").value; 
+
+            if(amountdaysplus==""){
+                amountdaysplus = 0;
+            }
+            if(columnNumberplus==""){
+                columnNumberplus = 0;
+            }
+            console.log("amountdaysplus: ",amountdaysplus);
+            console.log("columnNumberplus: ",columnNumberplus);
+
+            // Construct column numbers array
+            var columnNumbers = [
+                customerCodeCol,
+                customerPartNoCol,
+                orderQtyCols,
+                deliveryDateCols,
+                deliveryTimeCol,
+                deliveryPlantCol
+            ];
+
+            // Column names array
+            var columnNames = ['Customer Code', 'Customer Part Number', 'Order Qty', 'Delivery Date', 'Delivery Time', 'Delivery Plant'];
+
+            console.log("Column Numbers:", columnNumbers);
+            console.log("templateName: ", templateName);
+            console.log("templateType: ", templateType);
+            console.log("rowstarted: ",rowStarted);
+            console.log("fileType: ",fileType);
+            console.log("columnNames: ",columnNames);
+            console.log("columnNumbers: ",columnNumbers);
+            console.log("columnNumberplus: ",columnNumberplus);
+            console.log("amountofdayplus: ",amountdaysplus);
+
+            // Construct data to send to Django view
+            const requestData = {
+                'templateName': templateName,
+                'templateType': templateType,
+                'rowStarted': rowStarted,
+                'columnNames': columnNames,
+                'columnNumbers': columnNumbers,
+                'fileType': fileType,
+                'condition': condition,
+                'needBackupData': needBackupData,
+                'amountdaysplus': amountdaysplus, // Corrected
+                'columnNumberplus': columnNumberplus // Corrected
+            };
+
+            const csrftoken = getCookie('csrftoken');
+            console.log("requestData is ",requestData);
+
+            // Send data to Django view
+            fetch('/normal_template/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.alert("Successfully created the template!");
+                        window.location.href = '/templates';
+                    } else {
+                        console.error('Failed to create template');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        // Get the checkbox and weekly operation div elements
+        var condition1Checkbox = document.getElementById('check1');
+        var weeklyOperationDiv = document.getElementById('weekly_operation_div');
+
+        // Add event listener to the checkbox
+        condition1Checkbox.addEventListener('change', function() {
+            // Check if the checkbox is checked
+            if (this.checked) {
+            // If checked, display the weekly operation div
+            weeklyOperationDiv.style.display = 'block';
+            } else {
+            // If not checked, hide the weekly operation div
+            weeklyOperationDiv.style.display = 'none';
+            }
+        });
+         // Attach the event listener to the buttons
+            document.getElementById('noOfweeksbtn').addEventListener('click', createInputFields);
+            document.getElementById('noOfweeksbtn-edit').addEventListener('click', createInputFieldsEdit);
+
+            // Function to create input fields for new entries
+            function createInputFields() {
+                console.log("noOfweeksbtn is clicked");
+                const weeksInput1 = document.getElementById('noOfweeks');
+                const weeks1 = parseInt(weeksInput1.value, 10);
+                const orderQtyDiv1 = document.getElementById('orderQtyDiv');
+
+                console.log("weeksInput1: ", weeksInput1);
+                console.log("weeks1: ", weeks1);
+                console.log("weeks1 <= 0 ",weeks1 <= 0)
+                console.log("isNaN(weeks1) ",isNaN(weeks1))
+                console.log("orderQtyDiv1: ", orderQtyDiv1);
+
+                // Clear any existing input fields
+                orderQtyDiv1.innerHTML = '';
+
+                if (isNaN(weeks1) || weeks1 <= 0) {
+                    orderQtyDiv1.style.display = 'none';
+                    return;
+                }              
+
+                // Create the input fields based on the number of weeks entered
+                for (let i = 0; i < weeks1; i++) {
+                    const inputGroup1 = document.createElement('div');
+                    inputGroup1.className = 'input-group';
+
+                    const dateStartInput1 = document.createElement('input');
+                    dateStartInput1.type = 'number';
+                    dateStartInput1.id = `dateStart${i}`;
+                    dateStartInput1.name = `dateStart${i}`;
+                    dateStartInput1.placeholder = 'Start Date Col';
+                    dateStartInput1.required = true;
+
+                    const orderStartInput1 = document.createElement('input');
+                    orderStartInput1.type = 'number';
+                    orderStartInput1.id = `orderStart${i}`;
+                    orderStartInput1.name = `orderStart${i}`;
+                    orderStartInput1.placeholder = 'Start Order Col';
+                    orderStartInput1.required = true;
+
+                    inputGroup1.appendChild(dateStartInput1);
+                    inputGroup1.appendChild(orderStartInput1);
+
+                    orderQtyDiv1.appendChild(inputGroup1);
+                }
+
+                // Display the input fields
+                orderQtyDiv1.style.display = 'flex';
+                orderQtyDiv1.style.flexDirection = 'column';  // Ensure it uses column layout
+            }
+
+            // Function to create input fields for editing entries
+            function createInputFieldsEdit() {
+                console.log("noOfweeksbtn-edit is clicked");
+                const weeksInput = document.getElementById('noOfweeks-edit');
+                const weeks = parseInt(weeksInput.value, 10);
+                const orderQtyDiv = document.getElementById('orderQtyDiv-edit');
+
+                console.log("weeksInput: ", weeksInput);
+                console.log("weeks: ", weeks);
+                console.log("orderQtyDiv: ", orderQtyDiv);
+
+                // Clear any existing input fields
+                orderQtyDiv.innerHTML = '';
+
+                if (isNaN(weeks) || weeks <= 0) {
+                    orderQtyDiv.style.display = 'none';
+                    return;
+                }
+
+                // Create the input fields based on the number of weeks entered
+                for (let i = 0; i < weeks; i++) {
+                    const inputGroup = document.createElement('div');
+                    inputGroup.className = 'input-group';
+
+                    const dateStartInput = document.createElement('input');
+                    dateStartInput.type = 'number';
+                    dateStartInput.id = `dateStart${i}`;
+                    dateStartInput.name = `dateStart${i}`;
+                    dateStartInput.placeholder = 'Start Date Col';
+                    dateStartInput.required = true;
+
+                    const orderStartInput = document.createElement('input');
+                    orderStartInput.type = 'number';
+                    orderStartInput.id = `orderStart${i}`;
+                    orderStartInput.name = `orderStart${i}`;
+                    orderStartInput.placeholder = 'Start Order Col';
+                    orderStartInput.required = true;
+
+                    inputGroup.appendChild(dateStartInput);
+                    inputGroup.appendChild(orderStartInput);
+
+                    orderQtyDiv.appendChild(inputGroup);
+                }
+
+                // Display the input fields
+                orderQtyDiv.style.display = 'flex';
+                orderQtyDiv.style.flexDirection = 'column';  // Ensure it uses column layout
+            }
+
+        function fetchSpecialTemplates() {
+            fetch('/get_special_tems/')
+            .then(response => response.json())
+            .then(data => {
+                populateSpecialTemplateTable(data);
+            })
+            .catch(error => {
+                console.error('Error fetching templates: ', error);
+            });
+        }
+        
+
+        function populateSpecialTemplateTable(data){
+            //var table = document.getElementById('template-table-N');
+            //var tbody = document.createElement('tbody');
+
+            const tableContainer = document.getElementById('template-table-S');
+            tableContainer.innerHTML = '';
+            const table = document.createElement('table');
+            table.innerHTML='';
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+            thead.innerHTML='';
+            
+
+            // Create table header
+        const headers = ['TemplateID', 'TemplateName', 'StartRow', 'FileType','ColumnNames', 'ColumnNumbers', 'Edit/Delete'];
+        const headerRow = document.createElement('tr');
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+            headerRow.style.backgroundColor = "#95d1e771";
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Grouping data by templateID and templateName
+        const groupedData = {};
+        data.forEach(item => {
+            const key = item.templateID + '_' + item.templateName;
+            if (!groupedData[key]) {
+                groupedData[key] = [];
+            }
+            groupedData[key].push(item);
+        });
+
+        console.log("groupdedData: ",groupedData);
+
+        // Create table body
+        for (const key in groupedData) {
+            const rows = groupedData[key];
+            const rowSpan = rows.length;
+            rows.forEach((row, index) => {
+                const tr = document.createElement('tr');
+
+                if (index === 0) {
+                    const idCell = document.createElement('td');
+                    idCell.rowSpan = rowSpan;
+                    idCell.textContent = row.templateID;
+                    tr.appendChild(idCell);
+
+                    const nameCell = document.createElement('td');
+                    nameCell.rowSpan = rowSpan;
+                    nameCell.textContent = row.templateName;
+                    tr.appendChild(nameCell);
+
+                    const startRow = document.createElement('td');
+                    startRow.rowSpan = rowSpan;
+                    startRow.textContent = row.startRow;
+                    tr.appendChild(startRow);
+
+                    const fileType = document.createElement('td');
+                    fileType.rowSpan = rowSpan;
+                    fileType.textContent = row.fileType;
+                    tr.appendChild(fileType);         
+                }
+
+
+                Object.values(row).slice(5, -1).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+
+                if (index === 0) {
+                    /*const amountdaysplusCell = document.createElement('td');
+                    amountdaysplusCell.rowSpan = rowSpan;
+                    amountdaysplusCell.textContent = row.amountdaysplus;
+                    tr.appendChild(amountdaysplusCell);
+
+                    const columnNumberplusCell = document.createElement('td');
+                    columnNumberplusCell.rowSpan = rowSpan;
+                    columnNumberplusCell.textContent = row.columnNumberplus;
+                    tr.appendChild(columnNumberplusCell); */
+
+                    const editDeleteCell = document.createElement('td');
+					editDeleteCell.rowSpan = rowSpan;
+                    const div = document.createElement('div');
+                    div.style.display = "flex";
+                    div.style.padding = 5 + "px";
+
+                    const editBtn = document.createElement('button');
+                    
+                    editBtn.textContent = 'Edit';
+                    editBtn.className = 'edit-btn';
+                    editBtn.addEventListener('click', () => {
+                        document.getElementById('master-data-form-special').style.display = "none";
+                        document.getElementById('master-data-form-special-edit').style.display = "block";
+                        
+                        console.log("groupedData here = ",groupedData[row.templateID + '_' + row.templateName])
+                        const rowData = groupedData[row.templateID + '_' + row.templateName];
+                        console.log("rowData[0].columnNumber: ",rowData[0].columnNumber)
+                        // Get input values
+                        document.getElementById("special-template_name-edit").value = row.templateName;
+                        document.getElementById("row_started-special-edit").value = row.startRow ? parseInt(row.startRow) : '0';
+
+                        document.getElementById("customerCode-special-edit").value = parseInt(rowData[0].columnNumber); 
+                        document.getElementById("customerPartNo-special-edit").value = parseInt(rowData[1].columnNumber);
+
+                        var orderQtyCols = (rowData[2].columnNumber).split(',');
+                        document.getElementById("orderQtyStart-edit").value = parseInt(orderQtyCols[0]);
+                        document.getElementById("orderQtyEnd-edit").value = parseInt(orderQtyCols[1]);
+                        
+                        var deliveryDateCols = (rowData[3].columnNumber).split(',');
+                        document.getElementById("deliveryDateStart-edit").value = parseInt(deliveryDateCols[0]);
+                        document.getElementById("deliveryDateEnd-edit").value = parseInt(deliveryDateCols[1]);
+                        
+                        document.getElementById("deliveryTime-special-edit").value = parseInt(rowData[4].columnNumber);
+                        document.getElementById("deliveryPlant-special-edit").value = parseInt(rowData[5].columnNumber);
+                        document.getElementById("file_type-special-edit").value = row.fileType;
+                        console.log("row.condition:",row.condition);
+
+                        var condition = row.condition; 
+                        var check1Val = document.getElementById("check1-edit").value;
+                        console.log("check1Val" , check1Val);
+                        var check2Val = document.getElementById("check2-edit").value;
+                        console.log("check2Val" , check2Val);
+
+                        console.log("check1Val " , condition == check1Val);
+                        console.log("check2Val " , condition == check2Val);
+                        if (row.condition == check1Val){
+                            console.log("check1 is checked");
+                            document.getElementById("check1-edit").checked = true;
+                            document.getElementById('check2-edit').checked = false;
+                        }
+                        else if(row.condition == check2Val){
+                            console.log("check2 is checked");
+                            document.getElementById("check2-edit").checked = true;
+                            document.getElementById('check1-edit').checked = false;
+                        }
+                        else if(row.condition != check1Val && row.condition != check2Val){
+                            console.log("here we go")
+                            document.getElementById('check1-edit').checked = false;
+                            document.getElementById('check2-edit').checked = false;
+                           
+                        }
+
+                        var templateType = row.templateType;
+                        var acutualFA = document.getElementById("actual-FA-special-edit").value;
+                        var forecast = document.getElementById("forecast-only-special-edit").value;
+                        if (templateType == acutualFA){
+                            document.getElementById("actual-FA-special-edit").checked = true;
+                        }
+                        else if(templateType == forecast){
+                            document.getElementById("forecast-only-special-edit").checked = true;
+                        }
+
+                        if(row.needBackupData){
+                            document.getElementById("need-back-up-data-edit").checked;
+                        }
+
+                        amountdaysplusVal = rowData[0].amountdaysplus
+                        console.log(amountdaysplusVal != "0");
+
+                        var weeklyOperationDiv = document.getElementById('weekly_operation_div-edit');
+                        if(amountdaysplusVal != "0"){
+                            document.getElementById("check1-edit").checked = true;
+                            weeklyOperationDiv.style.display = 'block';
+                            document.getElementById('amountdaysplus-edit').value = rowData[0].amountdaysplus;
+                            document.getElementById('columnNumberplus-edit').value = rowData[0].columnNumberplus;
+                        }
+                        else if(amountdaysplusVal == "0"){
+                            //document.getElementById("check2").checked = true;
+                        }
+                        
+
+                        document.getElementById("amountdaysplus-edit").innerText = row.amountdaysplus; 
+                        document.getElementById("columnNumberplus-edit").innerText = row.columnNumberplus; 
+
+                        console.log('Edit clicked for templateID:', row.templateID);
+                        document.querySelector('#master-data-form-special-edit').addEventListener('submit', function(event) {
+                            event.preventDefault(); // Prevent default form submission
+                            var templateID = row.templateID;
+                            // Get input values
+                            var templateName = document.getElementById("special-template_name-edit").value;
+                            var rowStarted = document.getElementById("row_started-special-edit").value;
+                            var customerCodeCol = document.getElementById("customerCode-special-edit").value;
+                            var customerPartNoCol = document.getElementById("customerPartNo-special-edit").value;
+
+                            var orderQtyStart = document.getElementById("orderQtyStart-edit").value;
+                            var orderQtyEnd = document.getElementById("orderQtyEnd-edit").value;
+                            var orderQtyCols = orderQtyStart + "," + orderQtyEnd;
+
+                            var deliveryDateStart = document.getElementById("deliveryDateStart-edit").value;
+                            var deliveryDateEnd = document.getElementById("deliveryDateEnd-edit").value;
+                            var deliveryDateCols = deliveryDateStart + "," + deliveryDateEnd;
+
+                            var deliveryTimeCol = document.getElementById("deliveryTime-special-edit").value;
+                            var deliveryPlantCol = document.getElementById("deliveryPlant-special-edit").value;
+                            var fileType = document.getElementById("file_type-special-edit").value;
+
+                            var acutualFA = document.getElementById("actual-FA-special-edit").value;
+                            var forecast = document.getElementById("forecast-only-special-edit").value;
+                            var templateType = ''
+                            if (templateType == acutualFA){
+                                templateType = "Actual/FA";
+                            }
+                            else if(templateType == forecast){
+                                templateType = "Forecast-Only";
+                            }
+                                console.log("acutualFA ",acutualFA);
+                                console.log("forecast ",forecast);
+
+                            var needBackupData = document.getElementById("need-back-up-data-edit").checked;
+
+                            // Construct column numbers array
+                            var columnNumbers = [
+                                customerCodeCol,
+                                customerPartNoCol,
+                                orderQtyCols,
+                                deliveryDateCols,
+                                deliveryTimeCol,
+                                deliveryPlantCol
+                            ];
+
+                            // Column names array
+                            var columnNames = ['Customer Code', 'Customer Part Number', 'Order Qty', 'Delivery Date', 'Delivery Time', 'Delivery Plant'];
+
+                            // Construct data to send to Django view
+                            const requestData = {
+                                'templateID' : templateID,
+                                'templateName': templateName,
+                                'templateType': templateType,
+                                'rowStarted': rowStarted,
+                                'columnNames': columnNames,
+                                'columnNumbers': columnNumbers,
+                                'fileType': fileType,
+                                'needBackupData': needBackupData,
+                            };
+
+                                const csrftoken = getCookie('csrftoken');
+
+                                // Send data to Django view
+                                fetch(`/update_special_template/${templateID}/`, {
+                                    method: 'POST', // Change to 'POST' or 'PUT' based on your backend implementation
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRFToken': csrftoken
+                                    },
+                                    body: JSON.stringify(requestData)
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        window.alert("Successfully Updated!");
+                                        window.location.href = '/templates';
+                                    } else {
+                                        console.error('Failed to update data');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                }); 
+                            })
+                    });
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.addEventListener('click', () => {
+                        template_id = row.templateID;
+                        console.log("template_id ", template_id)
+                        // Confirm deletion
+                        if (confirm("Are you sure you want to delete this template?")) {
+                            const csrftoken = getCookie('csrftoken');
+
+                            fetch(`/delete_special_template/${template_id}/`, {
+                                method: 'DELETE', 
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrftoken
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    window.alert("Successfully deleted the template!");
+                                    window.location.href = '/templates';
+                                } else {
+                                    console.error('Failed to delete data');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            }); 
+                        }
+                    });
+                    div.appendChild(editBtn);
+                    div.appendChild(deleteBtn);
+                    editDeleteCell.appendChild(div);
+                    tr.appendChild(editDeleteCell);
+                }
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+        }
+
+        document.getElementById('submit-btn-special-template').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            console.log("Special template form submitted");
+
+            // Get input values
+            var templateName = document.getElementById("template_name-special").value;
+            var rowStarted = document.getElementById("row_started-special").value;
+            var customerCodeCol = document.getElementById("customerCode-special").value;
+            var customerPartNoCol = document.getElementById("customerPartNo-special").value;
+
+            var orderQtyCols = getDynamicFieldValues;
+
+            var deliveryTimeCol = document.getElementById("deliveryTime-special").value;
+            var deliveryPlantCol = document.getElementById("deliveryPlant-special").value;
+            var fileType = document.getElementById("file_type-special").value;
+            //var needPlusDate = document.getElementById("check1-special").checked;
+            //var summarizeOrders = document.getElementById("check2-special").checked;
+
+            var acutualFA = document.getElementById("actual-FA-special").value;
+            var acutualFAChk = document.getElementById("actual-FA-special").checked;
+            console.log("acutualFAChk ",acutualFAChk);
+            var forecast = document.getElementById("forecast-only-special").value;
+            var forecastChk = document.getElementById("forecast-only-special").checked;
+            console.log("forecastChk ",forecastChk);
+            var templateType = ''
+            if (acutualFAChk){
+                templateType = "Actual/FA";
+            }
+            else if(forecastChk){
+                templateType = "Forecast-Only";
+            }
+            console.log("acutualFA ",acutualFA);
+            console.log("forecast ",forecast);
+
+            var needBackupData = document.getElementById("need-back-up-data-edit").checked;
+
+            
+            console.log("templateName: ", templateName);
+            console.log("templateType: ", templateType);
+            console.log("customerCodeCol: ", customerCodeCol);
+            console.log("customerPartNoCol: ", customerPartNoCol);
+            console.log("rowstarted: ",rowStarted);
+            console.log("fileType: ",fileType);
+            //console.log("values of dynamic fields: ",values);
+            console.log("needBackupData: ",needBackupData);
+
+
+            console.log("displaying dynamic field values");
+
+            var values = getDynamicFieldValues();
+            var orderQtyCols = [];
+            var deliveryDateCol = [];
+
+            values.map(item => {
+                orderQtyCols.push(item.orderStart);
+                deliveryDateCol.push(item.startDate);
+            });
+
+            var orderQtyColsString = orderQtyCols.join(',');
+            var deliveryDateColString = deliveryDateCol.join(',');
+
+            console.log(orderQtyColsString);
+            console.log(deliveryDateColString);
+            // Construct column numbers array
+            var columnNumbers = [
+                customerCodeCol,
+                customerPartNoCol,
+                orderQtyColsString,
+                deliveryDateColString,
+                deliveryTimeCol,
+                deliveryPlantCol
+            ];
+
+            // Column names array
+            var columnNames = ['Customer Code', 'Customer Part Number', 'Order Qty', 'Delivery Date', 'Delivery Time', 'Delivery Plant'];
+
+            console.log("Column Numbers:", columnNumbers);
+            console.log("templateName: ", templateName);
+            console.log("templateType: ", templateType);
+            console.log("rowstarted: ",rowStarted);
+            console.log("fileType: ",fileType);
+            console.log("columnNames: ",columnNames);
+            console.log("columnNumbers: ",columnNumbers);
+
+            // Construct data to send to Django view
+            const requestData = {
+                'templateName': templateName,
+                'templateType': templateType,
+                'rowStarted': rowStarted,
+                'columnNames': columnNames,
+                'columnNumbers': columnNumbers,
+                'fileType': fileType,
+                'needBackupData': needBackupData,
+            };
+
+            const csrftoken = getCookie('csrftoken');
+            console.log("requestData is ",requestData);
+
+            // Send data to Django view
+            fetch('/special_template/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.alert("Successfully created the template!");
+                        window.location.href = '/templates';
+                    } else {
+                        console.error('Failed to create template');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        });
+
+        function getDynamicFieldValues() {
+                const weeksInput = document.getElementById('noOfweeks');
+                const weeks = parseInt(weeksInput.value, 10);
+                const values = [];
+
+                if (isNaN(weeks) || weeks <= 0) {
+                    return values; // Return empty array if no weeks or invalid input
+                }
+
+                for (let i = 0; i < weeks; i++) {
+                    const dateStartInput = document.getElementById(`dateStart${i}`);
+                    const orderStartInput = document.getElementById(`orderStart${i}`);
+
+                    const dateStartValue = dateStartInput.value.trim();
+                    const orderStartValue = orderStartInput.value.trim();
+
+                    // Check if both fields are not empty before adding them to the values array
+                    if (dateStartValue !== '' && orderStartValue !== '') {
+                        values.push({
+                            startDate: dateStartValue,
+                            orderStart: orderStartValue
+                        });
+                    }
+                }
+                console.log("values are ",values);
+                values.map( item => { console.log( item.startDate, item.orderStart) });
+                
+
+                return values;
+            }
+
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!---Bootstrap Links ----->
+    <link rel="stylesheet" href="static/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="static/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!---Jquery to make bootstrap work correctly ----->
+    <script src="static/jquery/dist/jquery.slim.min.js"></script>
+    <script src="static/jquery/dist/jquery.min.js"></script>
+
+    <!----Stylesheet Link---->
+    {% load static %}
+    <link rel="stylesheet" href="static/style.css">
+    <title>SNSS</title>
+    <style>
+    .navbar-nav li a{
+        color: white;
+    }
+    .navbar-nav li a:hover{
+        color: rgba(255, 255, 255, 0.471);
+    }
+    #master-data-dropdown .dropdown-menu a {
+        color: white;
+    }
+    #master-data-dropdown .dropdown-menu a:hover{
+        color: black;
+    }
+    /* Show dropdown menu on hover */
+    #master-data-dropdown:hover .dropdown-menu {
+    display: block;
+    background-color: black;
+    opacity: 0.8;
+    }
+
+    /* Hide dropdown menu by default */
+    .dropdown-menu {
+        display: none;
+    }
+
+
+    </style>
+    
+</head>
+<body id="main-container">
+    <header id="menu">
+        <div class="navbar navbar-light " style="background-color: #95D1E7; opacity: .7; padding: 0px;">
+            <span class="navbar-brand" style="color: red; font-weight: bolder; font-size: 60px; padding: 0px 0px 0px 10px">
+                SNSS
+            </span>
+            <span class="navbar-brand" style="color: #00008B; font-weight: bold; font-size: 40px;">
+                Production Control
+            </span>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style=" height: 3em;">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav ml-auto nav_left_side " style="width: 70%;">
+                <li class="nav-item" style="border: none;">
+                  <a class="nav-link" style="font-weight: bold;" href="#" id="home-tab">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link " style="font-weight: bold;" href="#" id="import-order-tab">Import Order</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " style="font-weight: bold;" href="#" id="order-plan-tab">Order Plan</a>
+                  </li>
+                <!--<li class="nav-item">
+                  <a class="nav-link " style="font-weight: bold;" href="#" id="master-data-tab">Master Data</a>
+                </li>-->
+                <li class="nav-item dropdown" id="master-data-dropdown">
+                    <a class="nav-link dropdown-toggle" style="font-weight: bold;" href="#" id="master-data-tab" role="button" aria-haspopup="true" aria-expanded="false">Master Data</a>
+                    <div class="dropdown-menu" aria-labelledby="master-data-tab">
+                      <a class="dropdown-item" href='#' style="font-weight: bold;" id="templates-tab">Templates</a>
+                      <a class="dropdown-item" href='#' style="font-weight: bold;" id="master-customer-data-tab">Customer Data</a>
+                    </div>
+                </li>
+              </ul>
+              <ul class="navbar-nav nav_right_side" style="width: 30%;">
+                <li class="nav-item login">
+                  <a class="nav-link " style="font-weight: bold;" href="#" id="login-btn">Log In</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+    </header>
+    
+    <div id="content_container"></div>
+    
+    <script>
+      var currentUser = sessionStorage.getItem('loggedInUser');
+      if(currentUser!==null){
+        currentUser = currentUser.substring(1, currentUser.length - 1); // Remove the first and last characters
+      }
+      console.log("Current user:", currentUser); 
+      console.log(currentUser === "freya@nsk.com");
+    
+      
+        $(document).ready(function() {
+        console.log("before clicking master-data tab")
+        $('#master-data-tab').click(function(e) {
+            e.preventDefault();
+            console.log("clicking master-data-tab")
+            if (currentUser === "freya@nsk.com") {
+                console.log("when current user is freya")
+
+                $(document).ready(function() {
+                // Perform AJAX request when the document is ready
+                $.ajax({
+                    type: 'GET',
+                    url: '/master/',  
+                    success: function(response) {
+                        $('#content_container').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+
+            }
+            else {
+                console.log("when current user is not freya")
+                $(document).ready(function() {
+                // Perform AJAX request when the document is ready
+                $.ajax({
+                    type: 'GET',
+                    url: '/login/',  // URL configured for login form view
+                    success: function(response) {
+                        $('#main_container').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+                });
+                }
+            
+            });
+        });
+
+
+    $(document).ready(function() {
+      $('#login-btn').click(function(e) {
+          e.preventDefault();
+          $.ajax({
+              type: 'GET',
+              url: '/login/',  // URL configured for login form view
+              success: function(response) {
+                  $('#main-container').html(response);
+              },
+              error: function(xhr, status, error) {
+                  console.error(error);
+              }
+          });
+      });
+  });
+   $(document).ready(function() {
+        $('#home-tab').click(function(e) {
+            e.preventDefault();
+            window.location.href = '/main';
+        });
+    });
+
+    $(document).ready(function() {
+        $('#import-order-tab').click(function(e) {
+            e.preventDefault();
+            window.location.href = '/importOrder_form';
+        });
+    });
+    $(document).ready(function() {
+        $('#templates-tab').click(function(e) {
+            e.preventDefault();
+            window.location.href = '/templates'; 
+        });
+    });
+    $(document).ready(function() {
+        $('#order-plan-tab').click(function(e) {
+            e.preventDefault();
+            window.location.href = '/orderPlan_form'; 
+        });
+    });
+    $(document).ready(function() {
+        $('#master-customer-data-tab').click(function(e) {
+            e.preventDefault();
+            window.location.href = '/master_customer_data'; 
+        });
+    });
+
+        
+  /*$(document).ready(function() {
+      $('#import-order-tab').click(function(e) {
+          e.preventDefault();
+          $.ajax({
+              type: 'GET',
+              url: '/importOrder_form',  // URL configured for importOrder_form view
+              success: function(response) {
+                  $('#main-container').html(response);
+              },
+              error: function(xhr, status, error) {
+                  console.error(error);
+              }
+          });
+      });
+  });*/
+
+ 
+  
+    </script>
+</body>
+</html>

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            margin: 0px;
+        }
+        .master-data-form-container{
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .master-data-form-container h3 {
+            text-align: center;
+        }
+        .master-data-form-container input[type="text"],
+        .master-data-form-container input[type="number"], 
+        .master-data-form-container input[type="file"],
+        .master-data-form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .master-data-form-container input[type="submit"] {
+        width: 100%;
+        background-color: #95D1E7;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+        .master-data-form-container input[type="submit"]:hover {
+            border: 1px solid #95D1E7;
+            background: none;
+        }
+        .template-choice-container{
+            padding-top: 5px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+            height: 120px;
+            background-color: #FF9C38;
+           
+        }
+        .template-type-container{
+            padding-top: 5px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+            height: 120px;
+            background-color: #95D1E7;
+        }
+        .radio-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .radio-group label {
+            margin-right: 20px;
+        }
+        .radio-group input[type="submit"] {
+            width: 80px;
+            height: 30px;
+            background-color: #95D1E7;
+            color: black;
+            font-weight: bold;
+            margin: 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }    
+        .numColumns-ok-btn, .numDays-ok-btn{
+            width: 80px;
+            height: 35px;
+            background-color: #95D1E7;
+            color: black;
+            font-weight: bold;
+            margin: 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .numColumns-ok-btn:hover, .numDays-ok-btn:hover{
+            border: 1px solid #95D1E7;
+            background: none;
+        }
+        .column {
+            background-color: #95d1e757;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .each_column {
+            display: flex;
+        }
+        .column_name{
+            flex: 8;
+        }
+        .column_no{
+            flex: 4;
+        }
+        .importActivity-ok-btn{
+            width: 60px;
+            height: 30px;
+            color: black;
+            font-weight: bold;
+            margin: 0;
+            border: 1px solid #95D1E7;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-bottom: 5px;
+        }
+        .importActivity-ok-btn:hover{
+            background-color: #95D1E7;
+            border: none;
+        }
+        #weekly_operation_div{
+            background-color: #95d1e757;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .day{
+            background-color: #95d1e757;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .each_day{
+            display: flex;
+        }
+        .date_name{
+            flex: 6;
+        }
+        .orderInEachDay{
+            flex: 6;
+        }
+        table{
+            width: 100%;
+            
+        }
+        th,td {
+            height: 30px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        input[type="checkbox"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: #fff;
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 0.1em solid currentColor;
+            border-radius: 0.15em;
+            transform: translateY(-0.075em);
+            display: grid;
+            place-content: center;
+            
+        }
+        input[type="checkbox"]::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em var(--form-control-color);
+        }
+
+        input[type="checkbox"]:checked::before {
+            transform: scale(1);
+            background-color: CanvasText;
+            transform-origin: bottom left;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
+        .form-control{
+            padding-left: 3px;
+        }
+        .edit-btn{
+            margin: 2px;
+            width: 50px;
+            background-color: #49CA3E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            height: 25px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+        .delete-btn {
+            margin: 2px;
+            width: 50px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            height: 25px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="template-choice-container" >
+        <h2>Choose a Template</h2>
+        <form action="#" class="radio-group" id="templateForm">
+        <div>
+            <input type="radio" id="normal" name="template" value="normal" onclick="getChecked(1)" checked="checked">
+            <label for="normal">Normal Template</label>
+        </div>
+        <div>
+            <input type="radio" id="special" name="template" value="special" onclick="getChecked(2)">
+            <label for="special">Special Template</label>
+        </div>
+        <!--input type="submit" value="Ok" class="" id="submit-template">-->
+        </form>
+    </div>
+
+    <div class="data-container" style="display: flex;">
+        <div style=" display: none; flex: 9; " id="normal-template-table">
+            <h3>Normal Template</h3>
+            <table id = "template-table-N">
+
+            </table>
+        </div>
+        <div class="master-data-form-container" style="display: none; flex: 3; margin: 10px; margin-top: 10px;" id="normal-template">
+            <div class="template-type-container" >
+                <h3>Choose template type</h3>
+                <form action="#" class="radio-group" id="templateTypeForm">
+                <div>
+                    <input type="radio" id="foerecast-actual-together" name="templateType" value="foerecast-actual-together" onclick="getTypeChecked(1)">
+                    <label for="foerecast-actual-together">Actual/FA</label>
+                </div>
+                <div>
+                    <input type="radio" id="foerecast-actual-separate" name="templateType" value="foerecast-actual-separate" onclick="getTypeChecked(2)">
+                    <label for="foerecast-actual-separate">Forecast Only</label>
+                </div>
+                <!--input type="submit" value="Ok" class="" id="submit-template">-->
+                </form>
+            </div>
+            <hr>
+            <div id="FAtogether" style="display: none;">
+                <h3 style="background-color:#FFC2D2; width: 100%; text-align: center; height:30px; padding-top: 15px;">Actaul Only/ FA</h3>
+
+                <form action="/normal_tem/" id="master-data-form" method="POST" >
+                    {% csrf_token %}
+                    <label for="customer_name">Enter customer name: </label><br>
+                    <input type="text" id="customer_name" name="customer_name" required><br><br>
+        
+                    <label for="row_started">Row started:</label><br>
+                    <input type="number" id="row_started" name="row_started" required><br><br>
+        
+                    <label for="numColumns">Enter number of columns:</label>
+                    <div style="display: flex;">
+                        <input type="number" id="numColumns" name="numColumns" required style=" margin-right: 5px;" min="1" max="6">
+                        <button type="button" onclick="addColumns()" class="numColumns-ok-btn"  >OK</button>
+                    </div>
+            
+                    <div id="columnsContainer"></div><br>
+                    
+                    <label for="file_type">File Type:</label><br>
+                    <select id="file_type" name="file_type" required>
+                        <option value="csv">.csv</option>
+                        <option value="txt">.txt</option>
+                        <option value="csv">.xls</option>
+                        <option value="txt">.xlsx</option>
+                    </select><br><br>
+                    <div >
+                        <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;" >Conditions</label><br>
+                        <div style="z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; padding: 8px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                            <div style="display: flex; margin: 5px 3px;">
+                                <input type="checkbox" id="condition1" name="condition1" value="Bike">
+                                <label for="condition1" class="form-control"> Need + date</label><br>
+                            </div>
+                            <div style="display: flex; margin: 5px 3px;">
+                                <input type="checkbox" id="condition2" name="condition2" value="Car">
+                                <label for="condition2" class="form-control"> Summarize orders by Delivery Date</label><br>
+                            </div>
+                            <div style="display: flex; margin: 5px 3px;">
+                                <input type="checkbox" id="condition5" name="condition5" value="Boat">
+                                <label for="condition5" class="form-control"> Summarize orders by Customer Part No</label><br>
+                            </div>          
+                        </div>
+                        
+                    </div>
+        
+                    <div id="weekly_operation_div" style="display: none;">
+                            <label for="no_of_days">Amount of Days +: </label>
+                            <input type="number" name="no_of_days" id="no_of_days" value="0">
+        
+                            <label for="column_no">Column Number +: </label>
+                            <input type="number" id="column_no_plus" name="column_no_plus" value="0">
+                    </div><br>
+
+                    <div>
+                        <input type="radio" id="normal" name="template" value="normal" onclick="getChecked(1)" >
+                        <label for="normal">Needs back up data</label>
+                    </div><br>
+
+                    <input type="submit" value="Submit" id="submit-btn-normal-template">
+                </form>
+            </div>
+            <div id="FAseparate" style="display: none;">
+                <h3 style="background-color:#FFC2D2; width: 100%; text-align: center; height:30px; padding-top: 15px;">Forecast Only</h3>
+                <form action="/normal_tem/" id="master-data-form" method="POST" >
+                    {% csrf_token %}
+               
+                    
+                        <label for="customer_name">Enter customer name: </label><br>
+                        <input type="text" id="customer_name" name="customer_name" required><br><br>
+            
+                        <label for="row_started">Row started:</label><br>
+                        <input type="number" id="row_started" name="row_started" required><br><br>
+            
+                        <label for="numColumns">Enter number of columns:</label>
+                        <div style="display: flex;">
+                            <input type="number" id="numColumns" name="numColumns" required style=" margin-right: 5px;" min="1" max="6">
+                            <button type="button" onclick="addColumns()" class="numColumns-ok-btn"  >OK</button>
+                        </div>
+                
+                        <div id="columnsContainer"></div><br>
+                        
+                        <label for="file_type">File Type:</label><br>
+                        <select id="file_type" name="file_type" required>
+                            <option value="csv">.csv</option>
+                            <option value="txt">.txt</option>
+                            <option value="csv">.xls</option>
+                            <option value="txt">.xlsx</option>
+                        </select><br><br>
+                        <div >
+                            <label for="" style="z-index: 1000; position: relative; background-color: white; margin-left: 2px;" >Conditions</label><br>
+                            <div style="z-index: 0; border: 2px solid #95D1E7; border-radius: 5px; padding: 8px; top: -7px; position: relative; padding-top: 10px; font-size: 14px;">
+                                <div style="display: flex; margin: 5px 3px;">
+                                    <input type="checkbox" id="condition1" name="condition1" value="Bike">
+                                    <label for="condition1" class="form-control"> Need + date</label><br>
+                                </div>
+                                <div style="display: flex; margin: 5px 3px;">
+                                    <input type="checkbox" id="condition2" name="condition2" value="Car">
+                                    <label for="condition2" class="form-control"> Summarize rows by Delivery Date</label><br>
+                                </div>
+                                <div style="display: flex; margin: 5px 3px;">
+                                    <input type="checkbox" id="condition3" name="condition3" value="Boat">
+                                    <label for="condition3" class="form-control"> Summarize rows by Delivery Plant</label><br>
+                                </div>
+                                <div style="display: flex; margin: 5px 3px;">
+                                    <input type="checkbox" id="condition4" name="condition4" value="Boat">
+                                    <label for="condition4" class="form-control"> Summarize rows by Customer Code</label><br>
+                                </div>
+                                <div style="display: flex; margin: 5px 3px;">
+                                    <input type="checkbox" id="condition5" name="condition5" value="Boat">
+                                    <label for="condition5" class="form-control"> Summarize rows by Customer Part Number</label><br>
+                                </div>        
+                                
+                            </div>
+                            
+                        </div>
+            
+                        <div id="weekly_operation_div" style="display: none;">
+                                <label for="no_of_days">Amount of Days +: </label>
+                                <input type="number" name="no_of_days" id="no_of_days" value="0">
+            
+                                <label for="column_no">Column Number +: </label>
+                                <input type="number" id="column_no_plus" name="column_no_plus" value="0">
+                        </div><br>
+    
+                        <div>
+                            <input type="radio" id="normal" name="template" value="normal" onclick="getChecked(1)" >
+                            <label for="normal">Needs back up data</label>
+                        </div><br>
+                
+                    <input type="submit" value="Submit" id="submit-btn-normal-template">
+                </form>
+            </div>
+            
+        </div>
+    
+    </div>
+    
+    
+    <div class="master-data-form-container" style="display: none;" id="special-template">
+        <h3>Special Template</h3>
+        <form id="master-data-form" enctype="multipart/form-data" >
+            <label for="customer_name">Enter customer name: </label><br>
+            <input type="text" id="customer_name" name="customer_name" required><br><br>
+
+            <label for="row_started">Row started:</label><br>
+            <input type="number" id="row_started" name="row_started" required><br><br>
+
+            <label for="numDays">Enter number of days:</label>
+            <div style="display: flex;">
+                <input type="number" id="numDays" name="numDays" required style=" margin-right: 5px;">
+                <button type="button" onclick="addDays()" class="numDays-ok-btn"  >OK</button>
+            </div>
+       
+            <div id="daysContainer"></div><br><br>
+
+            <div style="display: flex;">
+                <div>
+                    <input type="radio" id="daily" name="importActivity" value="daily">
+                    <label for="daily">Daily</label>
+                </div>
+                <div>
+                    <input type="radio" id="weekly" name="importActivity" value="weekly">
+                    <label for="weekly">Weekly</label>
+                </div>
+                <button type="button" onclick="" class="importActivity-ok-btn" >OK</button>
+            </div>
+
+            <div id="weekly_operation_special_div" style="display: none;"></div><br><br>
+            
+            <label for="file_type">File Type:</label><br>
+            <select id="file_type" name="file_type" required>
+                <option value="csv">.csv</option>
+                <option value="txt">.txt</option>
+                <option value="csv">.xls</option>
+                <option value="txt">.xlsx</option>
+            </select><br><br>
+            
+            <input type="submit" value="Submit" id="submit-btn-special-template">
+        </form>
+    </div>
+    
+
+    <script>
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchTemplates();
+        });
+
+        function fetchTemplates() {
+            fetch('/get_normal_tems/')
+            .then(response => response.json())
+            .then(data => {
+                populateNormalTemplateTable(data);
+            })
+            .catch(error => {
+                console.error('Error fetching templates: ', error);
+            });
+        }
+        
+
+        function populateNormalTemplateTable(data){
+            //var table = document.getElementById('template-table-N');
+            //var tbody = document.createElement('tbody');
+
+            const tableContainer = document.getElementById('template-table-N');
+            const table = document.createElement('table');
+            const thead = document.createElement('thead');
+            const tbody = document.createElement('tbody');
+
+            // Create table header
+        const headers = ['Template ID', 'Template Name', 'Start Row', 'File Type', 'Column Name', 'Column Number', 'Amount Days Plus', 'Column Number Plus', 'Edit/Delete'];
+        const headerRow = document.createElement('tr');
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Grouping data by templateID and templateName
+        const groupedData = {};
+        data.forEach(item => {
+            const key = item.templateID + '_' + item.templateName;
+            if (!groupedData[key]) {
+                groupedData[key] = [];
+            }
+            groupedData[key].push(item);
+        });
+
+        // Create table body
+        for (const key in groupedData) {
+            const rows = groupedData[key];
+            const rowSpan = rows.length;
+            rows.forEach((row, index) => {
+                const tr = document.createElement('tr');
+
+                if (index === 0) {
+                    const idCell = document.createElement('td');
+                    idCell.rowSpan = rowSpan;
+                    idCell.textContent = row.templateID;
+                    tr.appendChild(idCell);
+
+                    const nameCell = document.createElement('td');
+                    nameCell.rowSpan = rowSpan;
+                    nameCell.textContent = row.templateName;
+                    tr.appendChild(nameCell);
+
+                    const startRow = document.createElement('td');
+                    startRow.rowSpan = rowSpan;
+                    startRow.textContent = row.startRow;
+                    tr.appendChild(startRow);
+
+                    const fileType = document.createElement('td');
+                    fileType.rowSpan = rowSpan;
+                    fileType.textContent = row.fileType;
+                    tr.appendChild(fileType);
+                }
+
+                Object.values(row).slice(4).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+
+                if (index === 0) {
+                    const editDeleteCell = document.createElement('td');
+					editDeleteCell.rowSpan = rowSpan;
+                    const div = document.createElement('div');
+                    div.style.display = "flex";
+                    div.style.padding = 5 + "px";
+
+                    const editBtn = document.createElement('button');
+                    
+                    editBtn.textContent = 'Edit';
+                    editBtn.className = 'edit-btn';
+                    editBtn.addEventListener('click', () => {
+                        // Handle edit functionality here
+                        console.log('Edit clicked for templateID:', row.templateID);
+                    });
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.addEventListener('click', () => {
+                        template_id = row.templateID;
+                        console.log("template_id ", template_id)
+                        // Confirm deletion
+                        if (confirm("Are you sure you want to delete this template?")) {
+                            const csrftoken = getCookie('csrftoken');
+
+                            fetch(`/delete_template/${template_id}/`, {
+                                method: 'DELETE', 
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrftoken
+                                }
+                            })
+                            .then(response => {
+                                if (response.ok) {
+                                    window.alert("Successfully deleted the template!");
+                                    window.location.href = '/templates';
+                                } else {
+                                    console.error('Failed to delete data');
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            }); 
+                        }
+                    });
+                    div.appendChild(editBtn);
+                    div.appendChild(deleteBtn);
+                    editDeleteCell.appendChild(div);
+                    tr.appendChild(editDeleteCell);
+                }
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        table.appendChild(tbody);
+        tableContainer.appendChild(table);
+        }
+        // Function to get CSRF token from cookie
+        function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+        }
+
+        document.getElementById('normal-template').style.display = "block";
+        document.getElementById('normal-template-table').style.display = "block";
+        let btnChecked = "";
+
+        function getChecked(i) {
+            console.log("btnChecked: ", btnChecked)
+            if (btnChecked == i) {
+                document.getElementsByTagName("input")[i-1].checked = false;      
+            }
+            else {
+                btnChecked = i;
+            }
+            if (btnChecked == 1) {
+                document.getElementById('normal-template').style.display = "block";
+                document.getElementById('normal-template-table').style.display = "block";
+                document.getElementById('special-template').style.display = "none";
+                btnChecked == ""
+            }
+            else if (btnChecked == 2) {
+                document.getElementById('normal-template').style.display = "none";
+                document.getElementById('normal-template-table').style.display = "none";
+                document.getElementById('special-template').style.display = "block";
+                btnChecked == ""
+            }         
+        }
+
+        let btnTypeChecked = "";
+        function getTypeChecked(i) {
+            console.log("btnTypeChecked: ", btnTypeChecked)
+            if (btnTypeChecked == i) {
+                document.getElementsByTagName("input")[i-1].checked = false;      
+            }
+            else {
+                btnTypeChecked = i;
+            }
+            if (btnTypeChecked == 1) {
+                document.getElementById('FAtogether').style.display = "block";
+                document.getElementById('FAseparate').style.display = "none";
+                btnTypeChecked == ""
+            }
+            else if (btnTypeChecked == 2) {
+                document.getElementById('FAtogether').style.display = "none";
+                document.getElementById('FAseparate').style.display = "block";
+                btnTypeChecked == ""
+            }         
+        }
+        
+        //adding the box of column names and column numbers
+        function addColumns() {
+        var numColumns = parseInt(document.getElementById("numColumns").value);
+        var container = document.getElementById("columnsContainer");
+        container.innerHTML = ""; // Clear previous content
+        
+        for (var i = 0; i < numColumns; i++) {
+            var div = document.createElement("div");
+            div.className = "column";
+
+            var div2 = document.createElement("div");
+            div2.className = "each_column"
+
+            var columnName = document.createElement("select");
+            columnName.value = "Column Name";
+            columnName.className ="column_name";
+            columnName.name = "column_name";
+            columnName.setAttribute("id","column_name");
+
+            // Placeholder option
+            var placeholderOption = document.createElement("option");
+            placeholderOption.text = "Select Column Name";
+            placeholderOption.disabled = true;
+            placeholderOption.selected = true;
+            columnName.add(placeholderOption);
+
+            // Array of options
+            var options = ["Customer Code", "Customer Part Number", "Order Qty", "Delivery Date", "Delivery Plant","Delivery Time"];
+
+            // Create and add options
+            options.forEach(function(optionText) {
+                var option = document.createElement("option");
+                option.text = optionText;
+                columnName.add(option);
+            });
+
+            div2.appendChild(columnName);
+
+            var columnNo = document.createElement("input");
+            columnNo.type = "number";
+            columnNo.className = "column_no";
+            columnNo.name = "column_no";
+            columnNo.placeholder = "Column Number";
+            div2.appendChild(columnNo);
+
+            div.appendChild(div2)
+    
+            container.appendChild(div);
+        }
+        }
+
+        function getColumnValues() {
+            var columnValues = [];
+            var columnElements = document.querySelectorAll('.each_column');
+            
+            columnElements.forEach(function(columnElement) {
+                var columnName = columnElement.querySelector('.column_name').value;
+                var columnNo = columnElement.querySelector('.column_no').value;
+                
+                /*var column = {
+                    name: columnName,
+                    number: columnNo
+                };*/
+                var column = {};
+                column[columnName] = columnNo;
+                
+                columnValues.push(column);
+            });
+            
+            return columnValues;
+            //console.log("column values are: ")
+        }
+ 
+        // Get the checkbox and weekly operation div elements
+        var condition1Checkbox = document.getElementById('condition1');
+        var weeklyOperationDiv = document.getElementById('weekly_operation_div');
+
+        // Add event listener to the checkbox
+        condition1Checkbox.addEventListener('change', function() {
+            // Check if the checkbox is checked
+            if (this.checked) {
+            // If checked, display the weekly operation div
+            weeklyOperationDiv.style.display = 'block';
+            } else {
+            // If not checked, hide the weekly operation div
+            weeklyOperationDiv.style.display = 'none';
+            }
+        });
+   
+
+
+    function addDays(){
+        var numDays = parseInt(document.getElementById("numDays").value);
+        var container = document.getElementById("daysContainer");
+        container.innerHTML = ""; // Clear previous content
+        
+        for (var i = 0; i < numDays; i++) {
+            var div = document.createElement("div");
+            div.className = "day";
+
+            var div2 = document.createElement("div");
+            div2.className = "each_day"
+            
+            var date = document.createElement("input");
+            date.type = "number";
+            date.className = "date_name";
+            date.placeholder = "Enter Date column";
+            div2.appendChild(date);
+
+            var order = document.createElement("input");
+            order.type = "number";
+            order.className = "orderInEachDay"
+            order.placeholder ="Enter Order number column"
+            div2.appendChild(order)
+            div.appendChild(div2)
+            container.appendChild(div);
+        }
+    }
+
+        function getDayValues(){
+            var dayValues = [];
+            var dayElements = document.querySelectorAll('.each_day');
+            
+            dayElements.forEach(function(dayElement) {
+                var date = dayElement.querySelector('.date_name').value;
+                var order = dayElement.querySelector('.orderInEachDay').value;
+                
+                var day = {
+                    name: date,
+                    number: order,
+                };
+                
+                dayValues.push(day);
+            });
+            
+            return dayValues;
+            //console.log("column values are: ")
+        }
+
+
+        //Script for submitting special template
+        document.getElementById('submit-btn-special-template').addEventListener('click', function() {
+        console.log("Sepcial template submitted")
+        var customerName = document.getElementById('customer_name').value;
+
+        console.log("Customer Name: ", customerName);
+
+        var startRow = document.getElementById('row_started').value;
+        console.log("Starting Row: ", startRow);
+
+        var dayValues = getDayValues();
+        console.log(dayValues);
+
+        //var importActivityType = document.querySelector('input[name="importActivity"]:checked').value;
+        //console.log("Import Activity: ", importActivityType);
+
+        var fileType = document.getElementById('file_type').value;
+        console.log("File Type: ", fileType);
+
+        });
+
+
+
+    </script>
+</body>
+</html>
+
+
